@@ -43,7 +43,22 @@
 					"description": "Traces the communication between VS Code and the language server."
 				}
 			}
-		}
+		},
+		"languages": [
+			{
+				"id": "Processing",
+				"extensions": [
+					".pde"
+				]
+			}
+		],
+		"grammars": [
+			{
+				"language": "Processing",
+				"scopeName": "source.pde",
+				"path": "./syntaxes/processing.tmGrammar.json"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
