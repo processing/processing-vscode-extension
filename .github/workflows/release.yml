@@ -16,9 +16,9 @@ jobs:
           - os: ubuntu-latest
             suffix: linux
           - os: macOS-latest
-            suffix: macos
+            suffix: darwin
           - os: windows-latest
-            suffix: windows
+            suffix: win32
       fail-fast: false
     name: ${{ matrix.os }}
     steps:
@@ -85,7 +85,6 @@ jobs:
           tag: ${{ github.ref_name }}
           overwrite: true
           file_glob: true
-          name: Processing for VS Code
           body: |
               This is the pre-release of a Processing for VS Code extension.
               Download the supported preview version of Processing from https://github.com/Stefterv/processing4/releases/tag/processing-1374-4.4.74

@@ -21,8 +21,7 @@ export async function activate(context: ExtensionContext) {
 	// TODO: Add a launch button when a relevant file is open
 	const config = workspace.getConfiguration('processing');
 
-
-	const binaryPath = context.asAbsolutePath(join('install-locator', "build", 'image', 'bin', 'install-locator'));
+	const binaryPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'install-locator'));
 
 	const versions = await new Promise<ProcessingVersion[]>((resolve, reject) => {
 		exec(binaryPath, (error, stdout, stderr) => {
