@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: install-locator-${{ matrix.os }}
-          path: build/image.zip
+          path: install-locator/build/image.zip
           retention-days: 1
 
   release:
