@@ -25,12 +25,12 @@
 			{
 				"command": "processing.sketch.run",
 				"title": "Run the Processing Sketch",
-				"icon": "$(play)"
+				"icon": "media/start.svg"
 			},
 			{
 				"command": "processing.sketch.stop",
 				"title": "Stop the Processing Sketch",
-				"icon": "$(stop)"
+				"icon": "media/stop.svg"
 			}
 		],
 		"menus": {
@@ -90,8 +90,7 @@
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"lint": "eslint",
-		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-		"test": "sh ./scripts/e2e.sh"
+		"postinstall": "cd client && npm install && cd ../server && npm install && cd .."
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
