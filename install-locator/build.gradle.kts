@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.processing"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 application {
     mainClass.set("InstallLocatorKt")

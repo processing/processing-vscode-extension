@@ -6,20 +6,18 @@ on:
       - 'v*'  # Trigger on version tags like v1.0.0
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macOS-latest, windows-latest ]
+      fail-fast: false
+    name: ${{ matrix.os }}
+      - name: Git checkout
+        uses: actions/checkout@v2
 
-    permissions:
-      contents: write  # Required to upload to release
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Go to install-locator
+        run: cd install-locator
 
       - name: Install Java
         uses: actions/setup-java@v4
@@ -30,8 +28,39 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle
-        run: ./install-locator/gradlew runtime -p ./install-locator
+      - name: Build Locator
+        run: ./gradlew runtime
+
+      - name: Upload DMG as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: install-locator-${{ matrix.os }}
+          path: build/image.zip
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          pattern: install-locator-*
+
+      - name: Unzip artifacts
+        run: |
+          unzip -o install-locator-*.zip
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
       - name: Install dependencies
         run: npm ci
