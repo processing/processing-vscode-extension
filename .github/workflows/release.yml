@@ -85,6 +85,3 @@ jobs:
           tag: latest
           overwrite: true
           file_glob: true
-          body: |
-              This is the pre-release of a Processing for VS Code extension.
-              Download the supported preview version of Processing from https://github.com/Stefterv/processing4/releases/tag/processing-1374-4.4.74
