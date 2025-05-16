@@ -1,14 +1,14 @@
 {
 	"name": "processing4-vscode-extension",
-	"description": "A language server example",
-	"author": "Microsoft Corporation",
-	"license": "MIT",
+	"description": "Run Processing sketches in VS Code",
+	"author": "Stef Tervelde",
+	"license": "LGPL-2.1-or-later",
 	"version": "1.0.0",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Microsoft/vscode-extension-samples"
+		"url": "https://github.com/Stefterv/processing4-vscode-extension"
 	},
-	"publisher": "vscode-samples",
+	"publisher": "stefterv",
 	"categories": [],
 	"keywords": [
 		"multi-root ready"
