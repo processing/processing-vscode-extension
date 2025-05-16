@@ -34,11 +34,12 @@ jobs:
       - name: Build Locator
         run: ./install-locator/gradlew runtime -p install-locator
 
-      - name: Upload DMG as an artifact
+      - name: Upload result
         uses: actions/upload-artifact@v4
         with:
           name: install-locator-${{ matrix.os }}
           path: build/image.zip
+          retention-days: 1
 
   release:
     runs-on: ubuntu-latest
