@@ -53,6 +53,7 @@ export async function activate(context: ExtensionContext) {
 		} else {
 			// on windows we need to add the .bat to the binary path
 			binaryPath = `${binaryPath}.bat`;
+			resolve();
 		}
 	});
 
