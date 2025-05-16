@@ -2,6 +2,8 @@ name: Package and Release VS Code Extension
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'  # Trigger on version tags like v1.0.0
 
@@ -13,6 +15,7 @@ jobs:
         os: [ ubuntu-latest, macOS-latest, windows-latest ]
       fail-fast: false
     name: ${{ matrix.os }}
+    steps:
       - name: Git checkout
         uses: actions/checkout@v2
 
