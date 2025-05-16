@@ -18,12 +18,44 @@ interface ProcessingVersion {
 let terminal: Terminal | undefined;
 
 export async function activate(context: ExtensionContext) {
-	// TODO: Add a launch button when a relevant file is open
 	const config = workspace.getConfiguration('processing');
 
-	const binaryPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'install-locator'));
+	let binaryPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'install-locator'));
+	const javaPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'java'));
 
 	const versions = await new Promise<ProcessingVersion[]>((resolve, reject) => {
+		// add executable permissions to the binary
+		if (process.platform !== "win32") {
+			exec(`chmod +x ${binaryPath}`, (error, stdout, stderr) => {
+				if (error) {
+					console.error(`chmod error: ${error}`);
+					reject(error);
+				}
+				if (stderr) {
+					console.error(`stderr: ${stderr}`);
+					reject(stderr);
+				}
+			});
+
+			// add executable permissions to the java binary
+			exec(`chmod +x ${javaPath}`, (error, stdout, stderr) => {
+				if (error) {
+					console.error(`chmod error: ${error}`);
+					reject(error);
+				}
+				if (stderr) {
+					console.error(`stderr: ${stderr}`);
+					reject(stderr);
+				}
+			});
+		} else {
+			// on windows we need to add the .bat to the binary path
+			binaryPath = `${binaryPath}.bat`;
+		}
+
+
+
+
 		exec(binaryPath, (error, stdout, stderr) => {
 			if (error) {
 				console.error(`exec error: ${error}`);
