@@ -12,7 +12,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest, macOS-latest, windows-latest ]
+        include:
+          - os: ubuntu-latest
+            suffix: linux
+          - os: macOS-latest
+            suffix: macos
+          - os: windows-latest
+            suffix: windows
       fail-fast: false
     name: ${{ matrix.os }}
     steps:
@@ -37,7 +43,7 @@ jobs:
       - name: Upload result
         uses: actions/upload-artifact@v4
         with:
-          name: install-locator-${{ matrix.os }}
+          name: install-locator-${{ matrix.suffix }}
           path: install-locator/build/image
           retention-days: 1
 
