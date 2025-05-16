@@ -32,13 +32,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build Locator
-        run: ./install-locator/gradlew runtimeZip -p install-locator
+        run: ./install-locator/gradlew runtime -p install-locator
 
       - name: Upload result
         uses: actions/upload-artifact@v4
         with:
           name: install-locator-${{ matrix.os }}
-          path: install-locator/build/image.zip
+          path: install-locator/build/image
           retention-days: 1
 
   release:
@@ -56,10 +56,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: install-locator-*
-
-      - name: Unzip artifacts
-        run: |
-          unzip -o install-locator-*.zip
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
