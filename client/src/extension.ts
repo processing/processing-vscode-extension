@@ -68,7 +68,7 @@ export async function activate(context: ExtensionContext) {
 			}
 			const jsArray = stdout
 				// remove the square brackets
-				.slice(1, -2)
+				.replace(/^\[|\]$/g, '')
 				// split into array items
 				.split(',')
 				.map(s => s.trim().split("^"))
