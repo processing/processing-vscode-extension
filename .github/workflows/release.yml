@@ -31,7 +31,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle
-        run: ./install-locator/gradlew runtime
+        run: ./install-locator/gradlew runtime -p ./install-locator
 
       - name: Install dependencies
         run: npm ci
