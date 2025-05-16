@@ -1,0 +1,23 @@
+{
+	"name": "processing4-language-server-extension",
+	"description": "VSCode part of a language server",
+	"author": "Stef Tervelde",
+	"license": "LGPL-2.1-or-later",
+	"version": "1.0.0",
+	"publisher": "stefterv",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/stefterv/processing4-vscode-extension"
+	},
+	"engines": {
+		"vscode": "^1.75.0"
+	},
+	"dependencies": {
+		"glob": "^11.0.0",
+		"vscode-languageclient": "^9.0.1"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.75.1",
+		"@vscode/test-electron": "^2.3.9"
+	}
+}
