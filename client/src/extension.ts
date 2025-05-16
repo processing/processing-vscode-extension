@@ -1,11 +1,6 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
-
 import { exec, execSync } from 'child_process';
-import { join } from 'path';
-import { workspace, ExtensionContext, Uri, FileType, window } from 'vscode';
+import { dirname, join } from 'path';
+import { workspace, ExtensionContext, Uri, FileType, window, commands, Terminal } from 'vscode';
 
 import {
 	Executable,
@@ -20,8 +15,9 @@ interface ProcessingVersion {
 	path: string;
 }
 
+let terminal: Terminal | undefined;
+
 export async function activate(context: ExtensionContext) {
-	// TODO: Find where the Processing app is installed
 	// TODO: Add a launch button when a relevant file is open
 	const config = workspace.getConfiguration('processing');
 
@@ -114,6 +110,38 @@ export async function activate(context: ExtensionContext) {
 	client.error = function (e) {
 		console.log(e);
 	};
+
+
+	const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
+		if (!resource) {
+			return;
+		}
+
+		// Create a new terminal
+		if (terminal === undefined) {
+			terminal = window.createTerminal("Sketch");
+		}
+
+		// Show the terminal panel
+		terminal.show(true);
+
+		// Send the command to the terminal
+		terminal.sendText(`${selectedVersion.path} cli --sketch=${dirname(resource.fsPath)} --run`, true);
+
+		// clear the terminal
+		terminal.sendText("clear", true);
+	});
+
+	const stopSketch = commands.registerCommand('processing.sketch.stop', () => {
+		if (terminal === undefined) {
+			return;
+		}
+
+		// Send the command to the terminal
+		terminal.sendText('\x03', false);
+	});
+
+	context.subscriptions.push(runSketch, stopSketch);
 
 	// Start the client. This will also launch the server
 	client.start();

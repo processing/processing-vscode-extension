@@ -21,6 +21,42 @@
 	],
 	"main": "./client/out/extension",
 	"contributes": {
+		"commands": [
+			{
+				"command": "processing.sketch.run",
+				"title": "Run the Processing Sketch",
+				"icon": "$(play)"
+			},
+			{
+				"command": "processing.sketch.stop",
+				"title": "Stop the Processing Sketch",
+				"icon": "$(stop)"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "processing.sketch.run",
+					"when": "editorLangId == Processing || editorLangId == java",
+					"group": "navigation"
+				},
+				{
+					"command": "processing.sketch.stop",
+					"when": "editorLangId == Processing || editorLangId == java",
+					"group": "navigation"
+				}
+			],
+			"terminal/context": [
+				{
+					"command": "processing.sketch.run",
+					"group": "navigation"
+				},
+				{
+					"command": "processing.sketch.stop",
+					"group": "navigation"
+				}
+			]
+		},
 		"configuration": {
 			"type": "object",
 			"title": "Processing",
