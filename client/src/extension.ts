@@ -23,7 +23,7 @@ export async function activate(context: ExtensionContext) {
 	let binaryPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'install-locator'));
 	const javaPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'java'));
 
-	const versions = await new Promise<ProcessingVersion[]>((resolve, reject) => {
+	await new Promise<void>((resolve, reject) => {
 		// add executable permissions to the binary
 		if (process.platform !== "win32") {
 			exec(`chmod +x ${binaryPath}`, (error, stdout, stderr) => {
@@ -35,6 +35,7 @@ export async function activate(context: ExtensionContext) {
 					console.error(`stderr: ${stderr}`);
 					reject(stderr);
 				}
+				resolve();
 			});
 
 			// add executable permissions to the java binary
@@ -47,15 +48,15 @@ export async function activate(context: ExtensionContext) {
 					console.error(`stderr: ${stderr}`);
 					reject(stderr);
 				}
+				resolve();
 			});
 		} else {
 			// on windows we need to add the .bat to the binary path
 			binaryPath = `${binaryPath}.bat`;
 		}
+	});
 
-
-
-
+	const versions = await new Promise<ProcessingVersion[]>((resolve, reject) => {
 		exec(binaryPath, (error, stdout, stderr) => {
 			if (error) {
 				console.error(`exec error: ${error}`);
