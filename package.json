@@ -90,7 +90,7 @@
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"lint": "eslint",
-		"postinstall": "cd client && npm install && cd ../server && npm install && cd .."
+		"postinstall": "cd client && npm install && cd .."
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
