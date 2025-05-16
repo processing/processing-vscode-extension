@@ -17,7 +17,7 @@ jobs:
     name: ${{ matrix.os }}
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Go to install-locator
         run: cd install-locator
@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew runtime
 
       - name: Upload DMG as an artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: install-locator-${{ matrix.os }}
           path: build/image.zip
