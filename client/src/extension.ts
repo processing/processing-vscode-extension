@@ -1,5 +1,5 @@
 
-import { ExtensionContext, Terminal, window } from 'vscode';
+import { ExtensionContext, Terminal } from 'vscode';
 
 import {
 	LanguageClient
@@ -8,7 +8,7 @@ import { setupSelectedVersion } from './setupSelectedVersion';
 import { setupCommands } from './setupCommands';
 import { setupLanguageServer } from './setupLanguageServer';
 import { setupSidebar } from './setupSidebar';
-import { PdeFileDecorationProvider, setupDecorators } from './setupDecorators';
+import { setupDecorators } from './setupDecorators';
 
 
 export interface ProcessingVersion {
@@ -26,6 +26,7 @@ export async function activate(context: ExtensionContext) {
 	// TODO: Check for other Processing plugins and request deactivation if they are installed
 	// TODO: Add examples and sketchbook window
 	// TODO: Generate grammar based on the Processing version
+	// TODO: Setup language icon
 
 	await setupSelectedVersion(context);
 	setupCommands(context);

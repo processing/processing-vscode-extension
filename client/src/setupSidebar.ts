@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
 
 

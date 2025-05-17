@@ -10,6 +10,7 @@ export function setupCommands(context: ExtensionContext) {
 
 		// TODO: Save the current file, maybe settting?
 		// TODO: Add a keyboard shortcut to run the sketch
+		// TODO: Give feedback if the sketch is starting
 
 		let terminal = state.terminal;
 		// Create a new terminal
