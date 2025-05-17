@@ -164,7 +164,7 @@ export async function activate(context: ExtensionContext) {
 		}
 
 		// Create a new terminal
-		if (terminal === undefined) {
+		if (terminal === undefined || terminal.exitStatus) {
 			terminal = window.createTerminal("Sketch");
 		}
 
