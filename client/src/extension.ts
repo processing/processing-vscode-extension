@@ -28,11 +28,9 @@ export async function activate(context: ExtensionContext) {
 		if (process.platform !== "win32") {
 			exec(`chmod +x ${binaryPath}`, (error, stdout, stderr) => {
 				if (error) {
-					console.error(`chmod error: ${error}`);
 					reject(error);
 				}
 				if (stderr) {
-					console.error(`stderr: ${stderr}`);
 					reject(stderr);
 				}
 				resolve();
@@ -41,11 +39,9 @@ export async function activate(context: ExtensionContext) {
 			// add executable permissions to the java binary
 			exec(`chmod +x ${javaPath}`, (error, stdout, stderr) => {
 				if (error) {
-					console.error(`chmod error: ${error}`);
 					reject(error);
 				}
 				if (stderr) {
-					console.error(`stderr: ${stderr}`);
 					reject(stderr);
 				}
 				resolve();
@@ -55,16 +51,17 @@ export async function activate(context: ExtensionContext) {
 			binaryPath = `${binaryPath}.bat`;
 			resolve();
 		}
+	}).catch((e) => {
+		console.error(`Error setting permissions for ${binaryPath}: ${e}`);
+		window.showErrorMessage(`Error setting permissions for ${binaryPath}: ${e}`);
 	});
 
 	const versions = await new Promise<ProcessingVersion[]>((resolve, reject) => {
 		exec(binaryPath, (error, stdout, stderr) => {
 			if (error) {
-				console.error(`exec error: ${error}`);
 				reject(error);
 			}
 			if (stderr) {
-				console.error(`stderr: ${stderr}`);
 				reject(stderr);
 			}
 			const jsArray = stdout
@@ -83,29 +80,42 @@ export async function activate(context: ExtensionContext) {
 			;
 			resolve(jsArray);
 		});
+	}).catch((e) => {
+		console.error(`Error getting Processing versions: ${e}`);
+		window.showErrorMessage(`Error getting Processing versions: ${e}`);
 	});
+	if (!versions || versions.length === 0) {
+		await window.showErrorMessage(
+			`Processing not found, please install Processing 4.4.5 or higher and open it at least once.`,
+		);
+		return;
+	}
+	console.log(`Found Processing versions: ${versions.map(v => `${v.version} ${v.path}`).join(", ")}`);
 
 	const desiredVersion = config.get("version");
-
 
 	let selectedVersion: ProcessingVersion | undefined = undefined;
 	for (const app of versions) {
 		if (desiredVersion !== "latest" && app.version !== desiredVersion) {
+			console.warn(`Version (${app.version}) does not match the desired version (${desiredVersion}).`);
 			continue;
 		}
 		// Check if the path is a executable file
 		try {
 			const stat = await workspace.fs.stat(Uri.file(join(app.path)));
 			if (stat.type !== FileType.File) {
+				console.warn(`Path (${app.path}) is not a file.`);
 				continue;
 			}
 			const version = execSync(`"${app.path}" --version`, { encoding: 'utf-8' });
 			if (!version || !version.includes(app.version)) {
+				console.warn(`Version (${app.version}) at ${app.path} does not match the expected version.`);
 				continue;
 			}
 
 			selectedVersion = app;
-		} catch {
+		} catch (e) {
+			console.warn(`Checking version (${app.version}) at ${app.path} failed. ${e}`);
 			continue;
 		}
 
@@ -113,7 +123,7 @@ export async function activate(context: ExtensionContext) {
 
 	if (!selectedVersion) {
 		await window.showErrorMessage(
-			`Processing not found, please install Processing 4.4.5 or higher and run open it at least once.`,
+			`Desired Processing version not found, please install Processing ${desiredVersion} and open it at least once. Found versions: ${versions.map(v => v.version).join(", ")}`,
 		);
 		return;
 	}
