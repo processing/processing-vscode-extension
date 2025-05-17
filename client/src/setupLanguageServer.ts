@@ -31,9 +31,6 @@ export function setupLanguageServer() {
 		console.log(e);
 	};
 
-
-
-
 	// Start the client. This will also launch the server
 	state.client.start();
 }

@@ -7,6 +7,7 @@ import {
 import { setupSelectedVersion } from './setupSelectedVersion';
 import { setupCommands } from './setupCommands';
 import { setupLanguageServer } from './setupLanguageServer';
+import { setupSidebar } from './setupSidebar';
 
 
 export interface ProcessingVersion {
@@ -28,6 +29,7 @@ export async function activate(context: ExtensionContext) {
 	await setupSelectedVersion(context);
 	setupCommands(context);
 	setupLanguageServer();
+	setupSidebar();
 }
 
 

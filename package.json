@@ -74,7 +74,7 @@
 				{
 					"id": "processingSidebar",
 					"title": "Processing",
-					"icon": "media/start.svg"
+					"icon": "media/processing.svg"
 				}
 			]
 		},
@@ -83,7 +83,7 @@
 				{
 					"id": "processingSidebarView",
 					"name": "Processing",
-					"icon": "media/start.svg"
+					"icon": "media/processing.svg"
 				}
 			]
 		},
