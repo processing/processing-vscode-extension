@@ -34,6 +34,13 @@
 			}
 		],
 		"menus": {
+			"explorer/context": [
+				{
+					"command": "processing.sketch.run",
+					"when": "resourceExtname == .pde",
+					"group": "navigation"
+				}
+			],
 			"editor/title": [
 				{
 					"command": "processing.sketch.run",
@@ -82,7 +89,12 @@
 			"processingSidebar": [
 				{
 					"id": "processingSidebarView",
-					"name": "Processing",
+					"name": "Sketchbook",
+					"icon": "media/processing.svg"
+				},
+				{
+					"id": "processingSidebarView2",
+					"name": "Examples",
 					"icon": "media/processing.svg"
 				}
 			]

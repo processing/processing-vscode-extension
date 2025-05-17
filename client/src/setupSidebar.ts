@@ -1,4 +1,5 @@
-import { CancellationToken, Event, ProviderResult, TreeDataProvider, TreeItem, window } from 'vscode';
+import { join } from 'path';
+import { ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
 
 
 
@@ -6,20 +7,26 @@ export function setupSidebar() {
 	const treeDataProvider = new ProcessingWindowDataProvider();
 	window.createTreeView('processingSidebarView', { treeDataProvider });
 
+	{
+		const treeDataProvider = new ProcessingWindowDataProvider();
+		window.createTreeView('processingSidebarView2', { treeDataProvider });
+	}
+
 }
 
 class ProcessingTreeItem extends TreeItem {
-	constructor() {
-		super('Processing Item');
+	constructor(
+		public readonly label: string,
+		private version: string,
+		public readonly collapsibleState: TreeItemCollapsibleState,
+		public readonly path = "",
+	) {
+		super(label, collapsibleState);
+		this.tooltip = `${this.label}-${this.version}`;
+		// this.iconPath = join(__dirname, "..", "..", "media/processing.svg");
 	}
 
-	getTreeItem() {
-		return this;
-	}
 
-	getChildren() {
-		return [];
-	}
 }
 
 // TODO: Top level items: [examples, sketchbook]
@@ -27,18 +34,21 @@ class ProcessingTreeItem extends TreeItem {
 // TODO: Connect to Processing and request where the sketchbook is located
 
 class ProcessingWindowDataProvider implements TreeDataProvider<ProcessingTreeItem> {
-	onDidChangeTreeData?: Event<void | ProcessingTreeItem | ProcessingTreeItem[]>;
 	getTreeItem(element: ProcessingTreeItem): TreeItem | Thenable<TreeItem> {
-		throw new Error('getTreeItem not implemented.');
+		return element;
 	}
 	getChildren(element?: ProcessingTreeItem): ProviderResult<ProcessingTreeItem[]> {
-		throw new Error('getChildren not implemented.');
+		if (element === undefined) {
+			// return the examples and sketchbook items
+			return [
+				new ProcessingTreeItem('Sketchbook', '3.5.4', TreeItemCollapsibleState.Collapsed),
+				new ProcessingTreeItem('Examples', '3.5.4', TreeItemCollapsibleState.Expanded),
+			];
+		} else {
+			// Return the 
+			return [
+				new ProcessingTreeItem('Example 1', '3.5.4', TreeItemCollapsibleState.None),
+			];
+		}
 	}
-	getParent?(element: ProcessingTreeItem): ProviderResult<ProcessingTreeItem> {
-		throw new Error('getParent not implemented.');
-	}
-	resolveTreeItem?(item: TreeItem, element: ProcessingTreeItem, token: CancellationToken): ProviderResult<TreeItem> {
-		throw new Error('resolveTreeItem not implemented.');
-	}
-
 }

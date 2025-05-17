@@ -1,5 +1,5 @@
 
-import { ExtensionContext, Terminal } from 'vscode';
+import { ExtensionContext, Terminal, window } from 'vscode';
 
 import {
 	LanguageClient
@@ -8,6 +8,7 @@ import { setupSelectedVersion } from './setupSelectedVersion';
 import { setupCommands } from './setupCommands';
 import { setupLanguageServer } from './setupLanguageServer';
 import { setupSidebar } from './setupSidebar';
+import { PdeFileDecorationProvider, setupDecorators } from './setupDecorators';
 
 
 export interface ProcessingVersion {
@@ -30,6 +31,7 @@ export async function activate(context: ExtensionContext) {
 	setupCommands(context);
 	setupLanguageServer();
 	setupSidebar();
+	setupDecorators(context);
 }
 
 
