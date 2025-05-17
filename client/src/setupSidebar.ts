@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
 
 
@@ -22,7 +23,7 @@ class ProcessingTreeItem extends TreeItem {
 	) {
 		super(label, collapsibleState);
 		this.tooltip = `${this.label}-${this.version}`;
-		// this.iconPath = join(__dirname, "..", "..", "media/processing.svg");
+		this.iconPath = join(__dirname, "..", "..", "media/processing.svg");
 	}
 
 
