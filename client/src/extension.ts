@@ -18,6 +18,8 @@ interface ProcessingVersion {
 let terminal: Terminal | undefined;
 
 export async function activate(context: ExtensionContext) {
+	// TODO: Check for other Processing plugins and request deactivation if they are installed
+
 	const config = workspace.getConfiguration('processing');
 
 	let binaryPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'install-locator'));
@@ -157,35 +159,35 @@ export async function activate(context: ExtensionContext) {
 
 
 	const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
-    if (!resource) {
-      return;
-    }
+		if (!resource) {
+			return;
+		}
 
-    // Create a new terminal
-    if (terminal === undefined) {
-      terminal = window.createTerminal("Sketch");
-    }
+		// Create a new terminal
+		if (terminal === undefined) {
+			terminal = window.createTerminal("Sketch");
+		}
 
-    // Show the terminal panel
-    terminal.show(true);
+		// Show the terminal panel
+		terminal.show(true);
 
-    // clear the terminal
-    terminal.sendText("clear", true);
+		// clear the terminal
+		terminal.sendText("clear", true);
 
-	let path = selectedVersion.path;
-	if (process.platform === "win32") {
-		// on windows we need to escape spaces
-		path = `& "${path}"`;
-	}
+		let path = selectedVersion.path;
+		if (process.platform === "win32") {
+			// on windows we need to escape spaces
+			path = `& "${path}"`;
+		}
 
-    // Send the command to the terminal
-    terminal.sendText(
-      `${path} cli --sketch=${dirname(
-        resource.fsPath
-      )} --run`,
-      true
-    );
-  });
+		// Send the command to the terminal
+		terminal.sendText(
+			`${path} cli --sketch="${dirname(
+				resource.fsPath
+			)}" --run`,
+			true
+		);
+	});
 
 	const stopSketch = commands.registerCommand('processing.sketch.stop', () => {
 		if (terminal === undefined) {
