@@ -3,7 +3,7 @@ import { ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, w
 
 
 
-export function setupSidebar() {
+export async function setupSidebar() {
 	const treeDataProvider = new ProcessingWindowDataProvider();
 	window.createTreeView('processingSidebarView', { treeDataProvider });
 
@@ -34,6 +34,12 @@ class ProcessingTreeItem extends TreeItem {
 // TODO: Connect to Processing and request where the sketchbook is located
 
 class ProcessingWindowDataProvider implements TreeDataProvider<ProcessingTreeItem> {
+	constructor(
+		public readonly path = "",
+	) {
+
+	}
+
 	getTreeItem(element: ProcessingTreeItem): TreeItem | Thenable<TreeItem> {
 		return element;
 	}

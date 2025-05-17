@@ -81,7 +81,7 @@
 				{
 					"id": "processingSidebar",
 					"title": "Processing",
-					"icon": "media/processing.svg"
+					"icon": "media/processing-outline.svg"
 				}
 			]
 		},
@@ -90,12 +90,12 @@
 				{
 					"id": "processingSidebarView",
 					"name": "Sketchbook",
-					"icon": "media/processing.svg"
+					"icon": "media/processing-outline.svg"
 				},
 				{
 					"id": "processingSidebarView2",
 					"name": "Examples",
-					"icon": "media/processing.svg"
+					"icon": "media/processing-outline.svg"
 				}
 			]
 		},
@@ -104,7 +104,11 @@
 				"id": "Processing",
 				"extensions": [
 					".pde"
-				]
+				],
+				"icon": {
+					"light": "media/processing-filled.svg",
+					"dark": "media/processing-filled.svg"
+				}
 			}
 		],
 		"grammars": [
