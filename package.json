@@ -73,6 +73,12 @@
 					"type": "string",
 					"default": "latest",
 					"description": "The version of the Processing to use. The latest version is used by default."
+				},
+				"processing.autosave": {
+					"scope": "window",
+					"type": "boolean",
+					"default": false,
+					"description": "Automatically save the sketch before running it."
 				}
 			}
 		},

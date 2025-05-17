@@ -5,6 +5,8 @@ import { compareVersions } from './compareVersions';
 import { ProcessingVersion, state } from './extension';
 
 export async function setupSelectedVersion(context: ExtensionContext) {
+	// TODO: Rerun this function when the user changes the version in the settings
+
 	const config = workspace.getConfiguration('processing');
 
 	let binaryPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'install-locator'));
