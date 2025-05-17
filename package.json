@@ -69,6 +69,24 @@
 				}
 			}
 		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "processingSidebar",
+					"title": "Processing",
+					"icon": "media/start.svg"
+				}
+			]
+		},
+		"views": {
+			"processingSidebar": [
+				{
+					"id": "processingSidebarView",
+					"name": "Processing",
+					"icon": "media/start.svg"
+				}
+			]
+		},
 		"languages": [
 			{
 				"id": "Processing",
