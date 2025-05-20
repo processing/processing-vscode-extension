@@ -1,1 +1,1 @@
-{"root":["./src/compareversions.ts","./src/extension.ts","./src/setupcommands.ts","./src/setupdecorators.ts","./src/setuplanguageserver.ts","./src/setupselectedversion.ts","./src/setupsidebar.ts"],"version":"5.8.3"}
+{"root":["./src/compareversions.ts","./src/extension.ts","./src/setupcommands.ts","./src/setupdecorators.ts","./src/setuplanguageserver.ts","./src/setupselectedversion.ts","./src/setupsidebar.ts"],"errors":true,"version":"5.8.3"}
