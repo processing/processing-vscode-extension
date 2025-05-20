@@ -87,7 +87,7 @@
 				{
 					"id": "processingSidebar",
 					"title": "Processing",
-					"icon": "media/processing-outline.svg"
+					"icon": "media/processing-flat-color.svg"
 				}
 			]
 		},
@@ -96,12 +96,12 @@
 				{
 					"id": "processingSidebarSketchbookView",
 					"name": "Sketchbook",
-					"icon": "media/processing-outline.svg"
+					"icon": "media/processing-flat-color.svg"
 				},
 				{
 					"id": "processingSidebarExamplesView",
 					"name": "Examples",
-					"icon": "media/processing-outline.svg"
+					"icon": "media/processing-flat-color.svg"
 				}
 			]
 		},
@@ -112,8 +112,8 @@
 					".pde"
 				],
 				"icon": {
-					"light": "media/processing-filled.svg",
-					"dark": "media/processing-filled.svg"
+					"light": "media/processing-icon.svg",
+					"dark": "media/processing-icon.svg"
 				}
 			}
 		],
