@@ -114,7 +114,7 @@
 				"icon": {
 					"light": "media/processing-icon.svg",
 					"dark": "media/processing-icon.svg"
-				}
+ 				}
 			}
 		],
 		"grammars": [

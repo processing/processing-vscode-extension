@@ -37,6 +37,19 @@ export async function setupSidebar() {
 	const examplesProvider = new ProcessingWindowDataProvider(examples);
 	window.createTreeView('processingSidebarExamplesView', { treeDataProvider: examplesProvider });
 
+	const sketchbook = await new Promise<Folder[]>((resolve) => {
+		exec(`${state.selectedVersion.path} sketchbook list`, (error, stdout, stderr) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+			console.log(`stdout: ${stdout}`);
+			resolve(JSON.parse(stdout));
+		});
+	});
+	const sketchbookProvider = new ProcessingWindowDataProvider(sketchbook);
+	window.createTreeView('processingSidebarSketchbookView', { treeDataProvider: sketchbookProvider });
+
 }
 
 class FolderTreeItem extends TreeItem {

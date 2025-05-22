@@ -72,6 +72,9 @@ export async function setupSelectedVersion(context: ExtensionContext) {
 		console.error(`Error getting Processing versions: ${e}`);
 		window.showErrorMessage(`Error getting Processing versions: ${e}`);
 	});
+
+	// TODO: For snap grab processing from the path
+
 	if (!versions || versions.length === 0) {
 		await window.showErrorMessage(
 			`Processing not found, please install Processing 4.4.5 or higher and open it at least once.`
