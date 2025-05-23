@@ -78,7 +78,7 @@ class SketchTreeItem extends TreeItem {
 // TODO: Add examples from libraries
 // TODO: Connect to Processing and request where the sketchbook is located
 
-class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem> {
+class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | SketchTreeItem> {
 	constructor(
 		public readonly folders: Folder[],
 	) {
