@@ -131,7 +131,8 @@
 				"icon": {
 					"light": "media/processing-icon.svg",
 					"dark": "media/processing-icon.svg"
-				}
+				},
+				"configuration": "syntaxes/processing-lanuage.json"
 			}
 		],
 		"grammars": [
