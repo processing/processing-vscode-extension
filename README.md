@@ -56,6 +56,8 @@ This extension has been tested on the following platforms:
 - Play/Stop buttons don’t reflect the actual running state yet.
 - Snap release of Processing (Linux and WSL) is not supported yet (use the portable version instead).
 - Syntax highlighting for Processing-specific constants (e.g., `PI`, `RGB`, `DEGREES`, etc) is not yet implemented.
+- Classes imported from third-party libraries are not recognized by the language server, leading to line errors (the sketch will still run correctly) see issue [#9](https://github.com/Stefterv/processing4-vscode-extension/issues/9).
+
 
 ## Contributing
 This extension is still in development, and you’re welcome to help!
