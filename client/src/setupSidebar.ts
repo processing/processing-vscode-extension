@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import { join } from 'path';
 import { ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
 import { state } from './extension';
+import { existsSync } from 'fs';
 
 
 export interface Sketch {
@@ -20,9 +21,12 @@ export interface Folder {
 	sketches?: Sketch[];
 }
 
-
-
 export async function setupSidebar() {
+	setupExamples();
+	setupSketchbook();
+}
+
+async function setupExamples() {
 	const examples = await new Promise<Folder[]>((resolve) => {
 		exec(`${state.selectedVersion.path} contributions examples list`, (error, stdout, stderr) => {
 			if (error) {
@@ -36,7 +40,9 @@ export async function setupSidebar() {
 
 	const examplesProvider = new ProcessingWindowDataProvider(examples);
 	window.createTreeView('processingSidebarExamplesView', { treeDataProvider: examplesProvider });
+}
 
+async function setupSketchbook() {
 	const sketchbook = await new Promise<Folder[]>((resolve) => {
 		exec(`${state.selectedVersion.path} sketchbook list`, (error, stdout, stderr) => {
 			if (error) {
@@ -49,7 +55,6 @@ export async function setupSidebar() {
 	});
 	const sketchbookProvider = new ProcessingWindowDataProvider(sketchbook);
 	window.createTreeView('processingSidebarSketchbookView', { treeDataProvider: sketchbookProvider });
-
 }
 
 class FolderTreeItem extends TreeItem {
@@ -59,7 +64,6 @@ class FolderTreeItem extends TreeItem {
 		const label = folder.name;
 		super(label, TreeItemCollapsibleState.Collapsed);
 		this.tooltip = `${this.label}`;
-		this.iconPath = join(__dirname, "..", "..", "media/processing.svg");
 	}
 }
 
@@ -70,13 +74,19 @@ class SketchTreeItem extends TreeItem {
 		const label = sketch.name;
 		super(label, TreeItemCollapsibleState.None);
 		this.tooltip = `${this.label}`;
-		this.iconPath = join(__dirname, "..", "..", "media/processing.svg");
+		this.iconPath = join(__dirname, "..", "..", "media/processing-flat-color.svg");
+		this.command = {
+			command: 'processing.sketch.open',
+			title: 'Open Sketch',
+			arguments: [this.sketch.path]
+		};
+
+		const preview = `${sketch.path}/${sketch.name}.png`;
+		if (existsSync(preview)) {
+			this.iconPath = preview;
+		}
 	}
 }
-
-// TODO: Top level items: [examples, sketchbook]
-// TODO: Add examples from libraries
-// TODO: Connect to Processing and request where the sketchbook is located
 
 class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | SketchTreeItem> {
 	constructor(
@@ -89,9 +99,7 @@ class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | 
 	}
 	getChildren(element?: FolderTreeItem): ProviderResult<(FolderTreeItem | SketchTreeItem)[]> {
 		if (element === undefined) {
-			return this.folders.map((folder) => {
-				return new FolderTreeItem(folder);
-			});
+			return this.folders.flatMap((folder) => folder.children?.map(child => new FolderTreeItem(child)) ?? []);
 		} else {
 			const sketches = element.folder.sketches?.map((sketch) => {
 				return new SketchTreeItem(sketch);
@@ -108,3 +116,4 @@ class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | 
 		}
 	}
 }
+

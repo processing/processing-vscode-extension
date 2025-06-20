@@ -31,6 +31,15 @@
 				"command": "processing.sketch.stop",
 				"title": "Stop the Processing Sketch",
 				"icon": "media/stop.svg"
+			},
+			{
+				"command": "processing.sketch.open",
+				"title": "Open a Processing Sketch"
+			},
+			{
+				"command": "processing.sketch.new",
+				"title": "Create a new Processing Sketch",
+				"icon": "$(new-file)"
 			}
 		],
 		"menus": {
@@ -50,6 +59,13 @@
 				{
 					"command": "processing.sketch.stop",
 					"when": "editorLangId == Processing || editorLangId == java",
+					"group": "navigation"
+				}
+			],
+			"view/title": [
+				{
+					"command": "processing.sketch.new",
+					"when": "view == processingSidebarSketchbookView",
 					"group": "navigation"
 				}
 			],
@@ -114,7 +130,7 @@
 				"icon": {
 					"light": "media/processing-icon.svg",
 					"dark": "media/processing-icon.svg"
- 				}
+				}
 			}
 		],
 		"grammars": [
