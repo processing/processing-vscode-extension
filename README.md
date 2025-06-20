@@ -12,6 +12,8 @@
 
 This extension provides support for the Processing programming language in Visual Studio Code.
 
+![Processing VSCode Extension Screenshot](.github/media/screenshot.png)
+
 With familiar run and stop buttons, syntax highlighting, and other helpful features like code suggestions, this extension is designed to support creative coding with Processing for people who prefer using Visual Studio Code as their code editor of choice.
 
 ## Requirements
