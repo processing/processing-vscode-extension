@@ -81,6 +81,7 @@ class SketchTreeItem extends TreeItem {
 			arguments: [this.sketch.path]
 		};
 
+		// TODO: Make showing a preview a toggleable setting
 		const preview = `${sketch.path}/${sketch.name}.png`;
 		if (existsSync(preview)) {
 			this.iconPath = preview;

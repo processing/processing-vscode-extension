@@ -23,10 +23,7 @@ export const state = {
 };
 
 export async function activate(context: ExtensionContext) {
-	// TODO: Check for other Processing plugins and request deactivation if they are installed
-	// TODO: Add examples and sketchbook window
-	// TODO: Generate grammar based on the Processing version
-	// TODO: Setup language icon
+
 
 	await setupSelectedVersion(context);
 	setupCommands(context);

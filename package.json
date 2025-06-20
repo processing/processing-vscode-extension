@@ -1,6 +1,7 @@
 {
 	"name": "processing4-vscode-extension",
-	"description": "Run Processing sketches in VS Code",
+	"displayName": "Processing",
+	"description": "Run Processing sketches in VSCode",
 	"author": "Stef Tervelde",
 	"license": "LGPL-2.1-or-later",
 	"version": "1.0.0",
