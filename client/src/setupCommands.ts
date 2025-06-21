@@ -4,12 +4,12 @@ import { state } from './extension';
 
 export function setupCommands(context: ExtensionContext) {
 	const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
+		// TODO: If the command is run from a keyboard shortcut, find the current file
 		if (!resource) {
 			return;
 		}
 
 		// TODO: Save the current file, maybe settting?
-		// TODO: Add a keyboard shortcut to run the sketch
 		// TODO: Give feedback if the sketch is starting
 
 		let terminal = state.terminal;

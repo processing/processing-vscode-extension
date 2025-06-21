@@ -43,6 +43,14 @@
 				"icon": "$(new-file)"
 			}
 		],
+		"keybindings": [
+			{
+				"command": "processing.sketch.run",
+				"key": "ctrl+r",
+				"when": "editorTextFocus",
+				"mac": "cmd+r"
+			}
+		],
 		"menus": {
 			"explorer/context": [
 				{
