@@ -1,10 +1,12 @@
 import { dirname, join } from 'path';
 import { ExtensionContext, commands, Uri, window, workspace } from 'vscode';
 import { state } from './extension';
-import { tmpdir } from 'os';
 
 export function setupCommands(context: ExtensionContext) {
 	const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
+		// TODO: Use VScode contexts to highlight run button when sketch is running, blocked until we do not run the sketch in a terminal
+		// https://code.visualstudio.com/api/references/when-clause-contexts
+
 		const autosave = workspace
 			.getConfiguration('processing')
 			.get<boolean>('autosave');
@@ -28,6 +30,11 @@ export function setupCommands(context: ExtensionContext) {
 		let terminal = state.terminal;
 		// Create a new terminal
 		if (terminal === undefined || terminal.exitStatus) {
+			window.terminals.forEach(t => {
+				if (t.name === "Sketch") {
+					t.dispose();
+				}
+			});
 			state.terminal = window.createTerminal("Sketch");
 			terminal = state.terminal;
 		}
