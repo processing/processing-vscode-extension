@@ -50,12 +50,12 @@ export function setupCommands(context: ExtensionContext) {
 		let path = state.selectedVersion.path;
 		if (process.platform === "win32") {
 			// on windows we need to escape spaces
-			path = `& "${path}"`;
+			path = `& "${path}" 2>&1 | Out-String `;
 		}
 
 		// Send the command to the terminal
 		terminal.sendText(
-			`${path} cli --sketch="${dirname(resource.fsPath)}" --run`,
+			`${path} cli --sketch="${dirname(resource.fsPath)}" --run `,
 			true
 		);
 	});
