@@ -28,6 +28,7 @@ export async function activate(context: ExtensionContext) {
 	// TODO: Add a open contribution manager action (Needs Processing integration)
 	// TODO: Add checks for if a required Processing version is met (e.g, this specific feature works with 4.4.6+)
 	// TODO: Sketch management (open folder as sketch, create new sketch, etc)
+	// TODO: Exporting to standalone application
 
 	// Set up the selected Processing version, awaiting because we don't want to continue until we have a version
 	await setupSelectedVersion(context);
