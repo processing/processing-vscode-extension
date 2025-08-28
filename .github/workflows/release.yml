@@ -75,6 +75,9 @@ jobs:
 
       - name: Commit Changes
         run: |
+          git config --global user.email "hello@processing.org"
+          git config --global user.name "Processing Bot"
+
           git add .
           git commit -m "Prepare release ${{ github.event.release.tag_name }}"
 
