@@ -64,7 +64,7 @@
 			{
 				"command": "processing.sketch.run",
 				"key": "ctrl+r",
-				"when": "editorTextFocus",
+				"when": "editorTextFocus && (editorLangId == Processing || editorLangId == java)",
 				"mac": "cmd+r"
 			}
 		],
