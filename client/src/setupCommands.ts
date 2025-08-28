@@ -66,7 +66,7 @@ export function setupCommands(context: ExtensionContext) {
 			return;
 		}
 		if (isReadOnly) {
-			const path = join(tmpdir(), `processing-sketch-${new Date().getTime()}`, folder.split('/').pop() || 'sketch');
+			const path = join(context.globalStorageUri.fsPath, `processing-sketch-${new Date().getTime()}`, folder.split('/').pop() || 'sketch');
 			try {
 				await workspace.fs.copy(Uri.file(folder), Uri.file(path), { overwrite: true });
 				folder = path;
