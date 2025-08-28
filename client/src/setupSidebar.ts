@@ -1,6 +1,6 @@
-import { exec } from 'child_process';
+import { exec, spawn } from 'child_process';
 import { join } from 'path';
-import { ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
+import { Event, EventEmitter, ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
 import { state } from './extension';
 import { existsSync } from 'fs';
 
@@ -24,38 +24,87 @@ export interface Folder {
 export async function setupSidebar() {
 	// TODO: Show welcome screens whilst we are starting Processing
 	// TODO: Open examples as read-only or in a temporary location
+	// TODO: Reload examples and sketchbook when Processing version changes
+	// TODO: Add cache to results to speed up loading
 
 	setupExamples();
 	setupSketchbook();
 }
 
 async function setupExamples() {
-	const examples = await new Promise<Folder[]>((resolve) => {
-		exec(`${state.selectedVersion.path} contributions examples list`, (error, stdout, stderr) => {
-			if (error) {
-				console.error(`exec error: ${error}`);
-				return;
-			}
-			resolve(JSON.parse(stdout));
-		});
-	});
-
-	const examplesProvider = new ProcessingWindowDataProvider(examples);
+	const examplesProvider = new ProcessingWindowDataProvider('contributions examples list');
 	window.createTreeView('processingSidebarExamplesView', { treeDataProvider: examplesProvider });
 }
 
 async function setupSketchbook() {
-	const sketchbook = await new Promise<Folder[]>((resolve) => {
-		exec(`${state.selectedVersion.path} sketchbook list`, (error, stdout, stderr) => {
-			if (error) {
-				console.error(`exec error: ${error}`);
-				return;
-			}
-			resolve(JSON.parse(stdout));
-		});
-	});
-	const sketchbookProvider = new ProcessingWindowDataProvider(sketchbook);
+	const sketchbookProvider = new ProcessingWindowDataProvider('sketchbook list');
 	window.createTreeView('processingSidebarSketchbookView', { treeDataProvider: sketchbookProvider });
+}
+
+
+class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | SketchTreeItem> {
+	constructor(
+		public readonly command: string
+	) {
+		this._folders = [];
+		this.populate();
+	}
+	private _folders: Folder[];
+
+	private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>();
+	readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event;
+
+	async populate() {
+		this._folders = await this.grabSketchesWithCommand(this.command);
+		this._onDidChangeTreeData.fire(null);
+	}
+
+
+	getTreeItem(element: FolderTreeItem): TreeItem | Thenable<TreeItem> {
+		return element;
+	}
+	getChildren(element?: FolderTreeItem): ProviderResult<(FolderTreeItem | SketchTreeItem)[]> {
+		if (element === undefined) {
+			return this._folders.map((folder) => new FolderTreeItem(folder)) ?? [];
+		} else {
+			const sketches = element.folder.sketches?.map((sketch) => {
+				return new SketchTreeItem(sketch);
+			}) ?? [];
+			const folders = element.folder.children?.map((folder) => {
+				return new FolderTreeItem(folder);
+			}) ?? [];
+
+			// Sort sketches and folders
+			sketches.sort((a, b) => a.sketch.name.localeCompare(b.sketch.name));
+			folders.sort((a, b) => a.folder.name.localeCompare(b.folder.name));
+
+			return [...sketches, ...folders];
+		}
+	}
+
+	grabSketchesWithCommand(command: string): Promise<Folder[]> {
+		return new Promise<Folder[]>((resolve) => {
+			const process = spawn(state.selectedVersion.path, command.split(' '));
+			let data = '';
+			process.stdout.on('data', (chunk) => {
+				data += chunk;
+			});
+			process.on('close', (code) => {
+				if (code !== 0) {
+					console.error(`Process exited with code ${code}`);
+					resolve([]);
+					return;
+				}
+				try {
+					const folders = JSON.parse(data) as Folder[];
+					resolve(folders);
+				} catch (e) {
+					console.error(`Error parsing JSON: ${e}`);
+					resolve([]);
+				}
+			});
+		});
+	}
 }
 
 class FolderTreeItem extends TreeItem {
@@ -90,32 +139,4 @@ class SketchTreeItem extends TreeItem {
 	}
 }
 
-class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | SketchTreeItem> {
-	constructor(
-		public readonly folders: Folder[],
-	) {
-	}
-
-	getTreeItem(element: FolderTreeItem): TreeItem | Thenable<TreeItem> {
-		return element;
-	}
-	getChildren(element?: FolderTreeItem): ProviderResult<(FolderTreeItem | SketchTreeItem)[]> {
-		if (element === undefined) {
-			return this.folders.map((folder) => new FolderTreeItem(folder)) ?? [];
-		} else {
-			const sketches = element.folder.sketches?.map((sketch) => {
-				return new SketchTreeItem(sketch);
-			}) ?? [];
-			const folders = element.folder.children?.map((folder) => {
-				return new FolderTreeItem(folder);
-			}) ?? [];
-
-			// Sort sketches and folders
-			sketches.sort((a, b) => a.sketch.name.localeCompare(b.sketch.name));
-			folders.sort((a, b) => a.folder.name.localeCompare(b.folder.name));
-
-			return [...sketches, ...folders];
-		}
-	}
-}
 

@@ -37,7 +37,7 @@ If you encounter any issues with the Processing VSCode extension, try the follow
 - Restart VS Code.
 - Make sure no other Processing extensions are installed in VSCode.
 - Quit any running instances of Processing.
-- Double-check that you're using the correct version of Processing (4.4.76).
+- Double-check that you're using the correct version of Processing (4.4.6+).
 - Try running the Processing app once before opening VS Code.
 
 ## Compatibility

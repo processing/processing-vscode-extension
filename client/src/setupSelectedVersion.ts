@@ -9,71 +9,7 @@ export async function setupSelectedVersion(context: ExtensionContext) {
 
 	const config = workspace.getConfiguration('processing');
 
-	let binaryPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'install-locator'));
-	const javaPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'java'));
-
-	await new Promise<void>((resolve, reject) => {
-		// add executable permissions to the binary
-		if (process.platform !== "win32") {
-			exec(`chmod +x ${binaryPath}`, (error, stdout, stderr) => {
-				if (error) {
-					reject(error);
-				}
-				if (stderr) {
-					reject(stderr);
-				}
-				resolve();
-			});
-
-			// add executable permissions to the java binary
-			exec(`chmod +x ${javaPath}`, (error, stdout, stderr) => {
-				if (error) {
-					reject(error);
-				}
-				if (stderr) {
-					reject(stderr);
-				}
-				resolve();
-			});
-		} else {
-			// on windows we need to add the .bat to the binary path
-			binaryPath = `${binaryPath}.bat`;
-			resolve();
-		}
-	}).catch((e) => {
-		console.error(`Error setting permissions for ${binaryPath}: ${e}`);
-		window.showErrorMessage(`Error setting permissions for ${binaryPath}: ${e}`);
-	});
-
-	const versions = await new Promise<ProcessingVersion[]>((resolve, reject) => {
-		exec(binaryPath, (error, stdout, stderr) => {
-			if (error) {
-				reject(error);
-			}
-			if (stderr) {
-				reject(stderr);
-			}
-			const jsArray = stdout
-				// remove the square brackets
-				.replace("[", "")
-				.replace("]", "")
-				// split into array items
-				.split(',')
-				.map(s => s.trim().split("^"))
-				.map(v => ({ path: v[0], version: v[1] }))
-				// order by semver
-				.sort((a, b) => compareVersions(a.version, b.version))
-				.reverse();
-
-			;
-			resolve(jsArray);
-		});
-	}).catch((e) => {
-		console.error(`Error getting Processing versions: ${e}`);
-		window.showErrorMessage(`Error getting Processing versions: ${e}`);
-	});
-
-	// TODO: For snap grab processing from the path
+	const versions = await fetchProcessingVersions(context);
 
 	if (!versions || versions.length === 0) {
 		await window.showErrorMessage(
@@ -120,3 +56,75 @@ export async function setupSelectedVersion(context: ExtensionContext) {
 	}
 	state.selectedVersion = selectedVersion;
 }
+async function fetchProcessingVersions(context: ExtensionContext) {
+	const binaryPath = await getBinaryPathWithPermissions(context);
+
+	const versions = await new Promise<ProcessingVersion[]>((resolve, reject) => {
+		exec(binaryPath, (error, stdout, stderr) => {
+			if (error) {
+				reject(error);
+			}
+			if (stderr) {
+				reject(stderr);
+			}
+			const jsArray = stdout
+				// remove the square brackets
+				.replace("[", "")
+				.replace("]", "")
+				// split into array items
+				.split(',')
+				.map(s => s.trim().split("^"))
+				.map(v => ({ path: v[0], version: v[1] }))
+				// order by semver
+				.sort((a, b) => compareVersions(a.version, b.version))
+				.reverse();
+
+			;
+			resolve(jsArray);
+		});
+	}).catch((e) => {
+		console.error(`Error getting Processing versions: ${e}`);
+		window.showErrorMessage(`Error getting Processing versions: ${e}`);
+	});
+	return versions;
+}
+
+async function getBinaryPathWithPermissions(context: ExtensionContext) {
+	let binaryPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'install-locator'));
+	const javaPath = context.asAbsolutePath(join(`install-locator-${process.platform}`, 'bin', 'java'));
+
+	await new Promise<void>((resolve, reject) => {
+		// add executable permissions to the binary
+		if (process.platform !== "win32") {
+			exec(`chmod +x ${binaryPath}`, (error, stdout, stderr) => {
+				if (error) {
+					reject(error);
+				}
+				if (stderr) {
+					reject(stderr);
+				}
+				resolve();
+			});
+
+			// add executable permissions to the java binary
+			exec(`chmod +x ${javaPath}`, (error, stdout, stderr) => {
+				if (error) {
+					reject(error);
+				}
+				if (stderr) {
+					reject(stderr);
+				}
+				resolve();
+			});
+		} else {
+			// on windows we need to add the .bat to the binary path
+			binaryPath = `${binaryPath}.bat`;
+			resolve();
+		}
+	}).catch((e) => {
+		console.error(`Error setting permissions for ${binaryPath}: ${e}`);
+		window.showErrorMessage(`Error setting permissions for ${binaryPath}: ${e}`);
+	});
+	return binaryPath;
+}
+

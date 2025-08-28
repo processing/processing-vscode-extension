@@ -26,6 +26,7 @@ export const state = {
 export async function activate(context: ExtensionContext) {
 	// TODO: Detect other Processing extensions and warn the user
 
+	// TODO: Cache the selected version between sessions
 	await setupSelectedVersion(context);
 	setupCommands(context);
 	setupLanguageServer();

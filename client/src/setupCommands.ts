@@ -3,10 +3,10 @@ import { ExtensionContext, commands, Uri, window, workspace } from 'vscode';
 import { state } from './extension';
 
 export function setupCommands(context: ExtensionContext) {
-	const config = workspace.getConfiguration('processing');
-
 	const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
-		const autosave = config.get<boolean>('autosave');
+		const autosave = workspace
+			.getConfiguration('processing')
+			.get<boolean>('autosave');
 		if (autosave === true) {
 			// Save all files before running the sketch
 			commands.executeCommand('workbench.action.files.saveAll');
@@ -64,9 +64,12 @@ export function setupCommands(context: ExtensionContext) {
 			window.showErrorMessage("No sketch folder provided.");
 			return;
 		}
+		// TODO: Copy examples/readonly sketches to a temp location and open them there
 
-
-		const newWindow = config.get<boolean>('newWindow');
+		const newWindow = workspace
+			.getConfiguration('processing')
+			.get<boolean>('newWindow');
+		
 		if (newWindow === true) {
 			await commands.executeCommand('vscode.openFolder', Uri.file(folder), true);
 		} else {
