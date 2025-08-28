@@ -1,15 +1,14 @@
 
 import { ExtensionContext, Terminal } from 'vscode';
 
-import {
-	LanguageClient
-} from 'vscode-languageclient/node';
+import { LanguageClient } from 'vscode-languageclient/node';
 import { setupSelectedVersion } from './setupSelectedVersion';
 import { setupCommands } from './setupCommands';
 import { setupLanguageServer } from './setupLanguageServer';
 import { setupSidebar } from './setupSidebar';
 import { setupDecorators } from './setupDecorators';
 import { setupPDEFiles } from './setupPDEFiles';
+import { EventEmitter } from 'stream';
 
 
 export interface ProcessingVersion {
@@ -21,16 +20,19 @@ export const state = {
 	terminal: undefined as Terminal | undefined,
 	client: undefined as LanguageClient | undefined,
 	selectedVersion: undefined as ProcessingVersion | undefined,
+	onDidVersionChange: new EventEmitter<null>(),
 };
 
 export async function activate(context: ExtensionContext) {
 	// TODO: Detect other Processing extensions and warn the user
+	// TODO: Add a open contribution manager action (Needs Processing integration)
+	// TODO: Add checks for if a required Processing version is met (e.g, this specific feature works with 4.4.6+)
 
-	// TODO: Cache the selected version between sessions
+	// Set up the selected Processing version, awaiting because we don't want to continue until we have a version
 	await setupSelectedVersion(context);
 	setupCommands(context);
 	setupLanguageServer();
-	setupSidebar();
+	setupSidebar(context);
 	setupDecorators(context);
 	setupPDEFiles();
 }

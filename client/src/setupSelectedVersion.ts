@@ -5,8 +5,24 @@ import { compareVersions } from './compareVersions';
 import { ProcessingVersion, state } from './extension';
 
 export async function setupSelectedVersion(context: ExtensionContext) {
-	// TODO: Rerun this function when the user changes the version in the settings
+	const version = context.globalState.get<string>('processing-version');
+	const path = context.globalState.get<string>('processing-path');
 
+	if (version && path) {
+		state.selectedVersion = { version, path };
+		selectProcessingVersion(context);
+	} else {
+		await selectProcessingVersion(context);
+	}
+	
+	workspace.onDidChangeConfiguration(async (e) => {
+		if (e.affectsConfiguration('processing.version')) {
+			selectProcessingVersion(context);
+		}
+	});
+}
+
+async function selectProcessingVersion(context: ExtensionContext) {
 	const config = workspace.getConfiguration('processing');
 
 	const versions = await fetchProcessingVersions(context);
@@ -55,7 +71,14 @@ export async function setupSelectedVersion(context: ExtensionContext) {
 		return;
 	}
 	state.selectedVersion = selectedVersion;
+	state.onDidVersionChange.emit(null);
+
+	// Set the cache for the next time
+	context.globalState.update('processing-path', selectedVersion.path);
+	context.globalState.update('processing-version', selectedVersion.version);
 }
+
+
 async function fetchProcessingVersions(context: ExtensionContext) {
 	const binaryPath = await getBinaryPathWithPermissions(context);
 

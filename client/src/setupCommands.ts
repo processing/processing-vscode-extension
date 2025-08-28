@@ -1,6 +1,7 @@
-import { dirname } from 'path/posix';
+import { dirname, join } from 'path';
 import { ExtensionContext, commands, Uri, window, workspace } from 'vscode';
 import { state } from './extension';
+import { tmpdir } from 'os';
 
 export function setupCommands(context: ExtensionContext) {
 	const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
@@ -59,12 +60,22 @@ export function setupCommands(context: ExtensionContext) {
 		state.terminal.sendText('\x03', false);
 	});
 
-	const openSketch = commands.registerCommand('processing.sketch.open', async (folder) => {
+	const openSketch = commands.registerCommand('processing.sketch.open', async (folder: string, isReadOnly: boolean) => {
 		if (!folder) {
 			window.showErrorMessage("No sketch folder provided.");
 			return;
 		}
-		// TODO: Copy examples/readonly sketches to a temp location and open them there
+		if (isReadOnly) {
+			const path = join(tmpdir(), `processing-sketch-${new Date().getTime()}`, folder.split('/').pop() || 'sketch');
+			try {
+				await workspace.fs.copy(Uri.file(folder), Uri.file(path), { overwrite: true });
+				folder = path;
+			} catch (error) {
+				window.showErrorMessage(`Could not open read-only sketch: ${error instanceof Error ? error.message : error}`);
+				console.error(error);
+				return;
+			}
+		}
 
 		const newWindow = workspace
 			.getConfiguration('processing')

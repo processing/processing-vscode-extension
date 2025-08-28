@@ -1,6 +1,6 @@
-import { exec, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import { join } from 'path';
-import { Event, EventEmitter, ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
+import { Event, EventEmitter, ExtensionContext, ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
 import { state } from './extension';
 import { existsSync } from 'fs';
 
@@ -21,41 +21,54 @@ export interface Folder {
 	sketches?: Sketch[];
 }
 
-export async function setupSidebar() {
+export async function setupSidebar(context: ExtensionContext) {
 	// TODO: Show welcome screens whilst we are starting Processing
-	// TODO: Open examples as read-only or in a temporary location
-	// TODO: Reload examples and sketchbook when Processing version changes
-	// TODO: Add cache to results to speed up loading
 
-	setupExamples();
-	setupSketchbook();
+	setupSketchTreeView('sketchbook list', 'processingSidebarSketchbookView', context);
+	setupSketchTreeView('contributions examples list', 'processingSidebarExamplesView', context, true);
 }
 
-async function setupExamples() {
-	const examplesProvider = new ProcessingWindowDataProvider('contributions examples list');
-	window.createTreeView('processingSidebarExamplesView', { treeDataProvider: examplesProvider });
-}
-
-async function setupSketchbook() {
-	const sketchbookProvider = new ProcessingWindowDataProvider('sketchbook list');
-	window.createTreeView('processingSidebarSketchbookView', { treeDataProvider: sketchbookProvider });
+function setupSketchTreeView(command: string, viewId: string, context: ExtensionContext, readonly = false) {
+	const provider = new ProcessingWindowDataProvider(command, context, readonly);
+	window.createTreeView(viewId, { treeDataProvider: provider });
 }
 
 
 class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | SketchTreeItem> {
 	constructor(
-		public readonly command: string
+		public readonly command: string,
+		public readonly context: ExtensionContext,
+		public readonly readonly = false
 	) {
-		this._folders = [];
+		this.cached();
 		this.populate();
+		this.listen();
 	}
-	private _folders: Folder[];
+	private _folders: Folder[] = [];
 
-	private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>();
-	readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event;
+	private _onDidChangeTreeData: EventEmitter<null> = new EventEmitter<null>();
+	readonly onDidChangeTreeData: Event<null> = this._onDidChangeTreeData.event;
+
+	async listen() {
+		state.onDidVersionChange.on(null, async () => {
+			this.populate();
+		});
+	}
+
+	async cached() {
+		const data = await this.context.globalState.get<string>(`processing-tree-view-${this.command}-cache`);
+		if (data) {
+			try {
+				this._folders = JSON.parse(data) as Folder[];
+			} catch (e) {
+				console.error(`Error parsing cached JSON: ${e}`);
+			}
+		}
+		this._onDidChangeTreeData.fire(null);
+	}
 
 	async populate() {
-		this._folders = await this.grabSketchesWithCommand(this.command);
+		this._folders = await this.grabSketches();
 		this._onDidChangeTreeData.fire(null);
 	}
 
@@ -68,7 +81,7 @@ class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | 
 			return this._folders.map((folder) => new FolderTreeItem(folder)) ?? [];
 		} else {
 			const sketches = element.folder.sketches?.map((sketch) => {
-				return new SketchTreeItem(sketch);
+				return new SketchTreeItem(sketch, this.readonly);
 			}) ?? [];
 			const folders = element.folder.children?.map((folder) => {
 				return new FolderTreeItem(folder);
@@ -82,9 +95,9 @@ class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | 
 		}
 	}
 
-	grabSketchesWithCommand(command: string): Promise<Folder[]> {
+	grabSketches(): Promise<Folder[]> {
 		return new Promise<Folder[]>((resolve) => {
-			const process = spawn(state.selectedVersion.path, command.split(' '));
+			const process = spawn(state.selectedVersion.path, this.command.split(' '));
 			let data = '';
 			process.stdout.on('data', (chunk) => {
 				data += chunk;
@@ -96,7 +109,9 @@ class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | 
 					return;
 				}
 				try {
+					this.context.globalState.update(`processing-tree-view-${this.command}-cache`, data);
 					const folders = JSON.parse(data) as Folder[];
+					
 					resolve(folders);
 				} catch (e) {
 					console.error(`Error parsing JSON: ${e}`);
@@ -119,7 +134,8 @@ class FolderTreeItem extends TreeItem {
 
 class SketchTreeItem extends TreeItem {
 	constructor(
-		public readonly sketch: Sketch
+		public readonly sketch: Sketch,
+		public readonly readonly = false
 	) {
 		const label = sketch.name;
 		super(label, TreeItemCollapsibleState.None);
@@ -128,8 +144,9 @@ class SketchTreeItem extends TreeItem {
 		this.command = {
 			command: 'processing.sketch.open',
 			title: 'Open Sketch',
-			arguments: [this.sketch.path]
+			arguments: [this.sketch.path, this.readonly]
 		};
+		// TODO: add right-click menu to open in new window, open containing folder, etc.
 
 		// TODO: Make showing a preview a toggleable setting
 		const preview = `${sketch.path}/${sketch.name}.png`;

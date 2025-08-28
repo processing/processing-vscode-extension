@@ -4,24 +4,24 @@ import { Executable, LanguageClient } from 'vscode-languageclient/node';
 import { state } from './extension';
 
 export function setupLanguageServer() {
+	// TODO: Listen for version changes and restart the server
+
 	const serverOptions: Executable = {
 		command: state.selectedVersion.path,
 		args: ["lsp"]
 	};
 
-	// Options to control the language client
 	const clientOptions: LanguageClientOptions = {
-		// Register the server for plain text documents
 		documentSelector: [{ scheme: 'file', language: 'Processing' }],
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
-			fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
+			fileEvents: workspace.createFileSystemWatcher('**/*.{pde,java}')
 		}
 	};
 
 	// Create the language client and start the client.
 	state.client = new LanguageClient(
-		'languageServerExample',
+		'processingLanguageServer',
 		'Processing Language Server',
 		serverOptions,
 		clientOptions
