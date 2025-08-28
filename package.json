@@ -1,19 +1,35 @@
 {
 	"name": "processing4-vscode-extension",
+	"version": "1.0.0",
+	"publisher": "stefterv",
 	"displayName": "Processing",
 	"description": "Run Processing sketches in VSCode",
 	"author": "Stef Tervelde",
 	"license": "LGPL-2.1-or-later",
-	"version": "1.0.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Stefterv/processing4-vscode-extension"
 	},
-	"publisher": "stefterv",
-	"categories": [],
-	"keywords": [
-		"multi-root ready"
+	"icon": "media/processing-color.png",
+	"categories": [
+		"Programming Languages"
 	],
+	"keywords": [
+		"processing",
+		"pde",
+		"language",
+		"lsp",
+		"language-server",
+		"sketch",
+		"arduino",
+		"java",
+		"development",
+		"creative-coding",
+		"learning"
+	],
+	"sponsor": {
+		"url": "https://github.com/processing"
+	},
 	"engines": {
 		"vscode": "^1.75.0"
 	},
