@@ -73,17 +73,23 @@ jobs:
       - name: Install vsce
         run: npm install -g @vscode/vsce
 
-      # - name: Package extension
-      #   run: vsce package
+      - name: Commit Changes
+        run: |
+          git add .
+          git commit -m "Prepare release ${{ github.event.release.tag_name }}"
 
-      # - name: Upload VSIX to GitHub Release
-      #   uses: svenstaro/upload-release-action@v2
-      #   with:
-      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
-      #     file: '*.vsix'
-      #     tag: ${{ github.ref }}
-      #     file_glob: true
+      - name: Package extension
+        run: vsce package ${{ github.event.release.tag_name }}
 
+      - name: Upload VSIX to GitHub Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: '*.vsix'
+          tag: ${{ github.ref }}
+          file_glob: true
+          
+    
       - name: Publish Extension
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
