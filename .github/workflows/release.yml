@@ -73,16 +73,12 @@ jobs:
       - name: Install vsce
         run: npm install -g @vscode/vsce
 
-      - name: Commit Changes
+      - name: Set the version
         run: |
-          git config --global user.email "hello@processing.org"
-          git config --global user.name "Processing Bot"
-
-          git add .
-          git commit -m "Prepare release ${{ github.event.release.tag_name }}"
+          npm version ${{ github.event.release.tag_name }} --no-git-tag-version
 
       - name: Package extension
-        run: vsce package ${{ github.event.release.tag_name }}
+        run: vsce package
 
       - name: Upload VSIX to GitHub Release
         uses: svenstaro/upload-release-action@v2
@@ -97,4 +93,4 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
-          vsce publish ${{ github.event.release.tag_name }}
+          vsce publish
