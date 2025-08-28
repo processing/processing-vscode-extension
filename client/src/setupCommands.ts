@@ -18,12 +18,10 @@ export function setupCommands(context: ExtensionContext) {
 			}
 		}
 
-		// TODO: If the command is run from a keyboard shortcut, find the current file
 		if (!resource) {
 			return;
 		}
 
-		// TODO: Save the current file, maybe settting?
 		// TODO: Give feedback if the sketch is starting
 
 		let terminal = state.terminal;
@@ -121,6 +119,8 @@ export function setupCommands(context: ExtensionContext) {
 			console.error(error);
 		}
 	});
+
+	// TODO: Add command to select Processing version and set the setting
 
 	context.subscriptions.push(runSketch, stopSketch, openSketch, newSketch);
 }
