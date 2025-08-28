@@ -10,7 +10,7 @@
 		"type": "git",
 		"url": "https://github.com/Stefterv/processing4-vscode-extension"
 	},
-	"icon": "media/processing-color.png",
+	"icon": "media/processing-logo.png",
 	"categories": [
 		"Programming Languages"
 	],
