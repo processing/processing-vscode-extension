@@ -23,6 +23,7 @@ export interface Folder {
 
 export async function setupSidebar() {
 	// TODO: Show welcome screens whilst we are starting Processing
+	// TODO: Open examples as read-only or in a temporary location
 
 	setupExamples();
 	setupSketchbook();
