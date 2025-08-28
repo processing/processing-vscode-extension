@@ -1,4 +1,4 @@
-import { dirname, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { ExtensionContext, commands, Uri, window, workspace } from 'vscode';
 import { state } from './extension';
 
@@ -75,7 +75,7 @@ export function setupCommands(context: ExtensionContext) {
 			return;
 		}
 		if (isReadOnly) {
-			const path = join(context.globalStorageUri.fsPath, `processing-sketch-${new Date().getTime()}`, dirname(folder));
+			const path = join(context.globalStorageUri.fsPath, `processing-sketch-${new Date().getTime()}`, basename(folder));
 			try {
 				await workspace.fs.copy(Uri.file(folder), Uri.file(path), { overwrite: true });
 				folder = path;
