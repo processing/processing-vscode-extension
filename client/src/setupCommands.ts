@@ -37,10 +37,12 @@ export function setupCommands(context: ExtensionContext) {
 			});
 			state.terminal = window.createTerminal("Sketch");
 			terminal = state.terminal;
+			// Show the terminal panel the first time
+			terminal.show(true);
+		} else {
+			// Send the command to the terminal
+			terminal.sendText('\x03', false);
 		}
-
-		// Show the terminal panel
-		terminal.show(true);
 
 		// clear the terminal
 		terminal.sendText("clear", true);
