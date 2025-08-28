@@ -9,6 +9,7 @@ import { setupCommands } from './setupCommands';
 import { setupLanguageServer } from './setupLanguageServer';
 import { setupSidebar } from './setupSidebar';
 import { setupDecorators } from './setupDecorators';
+import { setupPDEFiles } from './setupPDEFiles';
 
 
 export interface ProcessingVersion {
@@ -30,6 +31,7 @@ export async function activate(context: ExtensionContext) {
 	setupLanguageServer();
 	setupSidebar();
 	setupDecorators(context);
+	setupPDEFiles();
 }
 
 

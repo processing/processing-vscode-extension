@@ -18,7 +18,8 @@
 		"vscode": "^1.75.0"
 	},
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onStartupFinished",
+		"workspaceContains:**/*.pde"
 	],
 	"main": "./client/out/extension",
 	"contributes": {
@@ -102,8 +103,14 @@
 				"processing.autosave": {
 					"scope": "window",
 					"type": "boolean",
-					"default": false,
+					"default": true,
 					"description": "Automatically save the sketch before running it."
+				},
+				"processing.newWindow": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"description": "Open sketches in a new window. If disabled, the current window will be reused."
 				}
 			}
 		},

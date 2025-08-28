@@ -33,7 +33,6 @@ async function setupExamples() {
 				console.error(`exec error: ${error}`);
 				return;
 			}
-			console.log(`stdout: ${stdout}`);
 			resolve(JSON.parse(stdout));
 		});
 	});
@@ -49,7 +48,6 @@ async function setupSketchbook() {
 				console.error(`exec error: ${error}`);
 				return;
 			}
-			console.log(`stdout: ${stdout}`);
 			resolve(JSON.parse(stdout));
 		});
 	});
@@ -100,7 +98,7 @@ class ProcessingWindowDataProvider implements TreeDataProvider<FolderTreeItem | 
 	}
 	getChildren(element?: FolderTreeItem): ProviderResult<(FolderTreeItem | SketchTreeItem)[]> {
 		if (element === undefined) {
-			return this.folders.flatMap((folder) => folder.children?.map(child => new FolderTreeItem(child)) ?? []);
+			return this.folders.map((folder) => new FolderTreeItem(folder)) ?? [];
 		} else {
 			const sketches = element.folder.sketches?.map((sketch) => {
 				return new SketchTreeItem(sketch);

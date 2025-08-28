@@ -77,7 +77,7 @@ export async function setupSelectedVersion(context: ExtensionContext) {
 
 	if (!versions || versions.length === 0) {
 		await window.showErrorMessage(
-			`Processing not found, please install Processing 4.4.5 or higher and open it at least once.`
+			`Processing not found, please install Processing 4.4.6 or higher and open it at least once.`
 		);
 		return;
 	}

@@ -3,7 +3,21 @@ import { ExtensionContext, commands, Uri, window, workspace } from 'vscode';
 import { state } from './extension';
 
 export function setupCommands(context: ExtensionContext) {
+	const config = workspace.getConfiguration('processing');
+
 	const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
+		const autosave = config.get<boolean>('autosave');
+		if (autosave === true) {
+			// Save all files before running the sketch
+			commands.executeCommand('workbench.action.files.saveAll');
+		}
+		if (resource == undefined) {
+			const editor = window.activeTextEditor;
+			if (editor) {
+				resource = editor.document.uri;
+			}
+		}
+
 		// TODO: If the command is run from a keyboard shortcut, find the current file
 		if (!resource) {
 			return;
@@ -53,29 +67,16 @@ export function setupCommands(context: ExtensionContext) {
 			return;
 		}
 
-		workspace.updateWorkspaceFolders(
-			workspace.workspaceFolders ? workspace.workspaceFolders.length : 0,
-			null,
-			{ uri: Uri.file(folder) }
-		);
-		await commands.executeCommand('workbench.view.explorer');
-		const folderName = folder.split('/').pop();
-		const sketchFile = Uri.file(`${folder}/${folderName}.pde`);
-		try {
-			if (!workspace.fs.stat(sketchFile)) {
-				return;
-			}
 
-			const doc = await workspace.openTextDocument(sketchFile);
-			if (!doc) {
-				window.showErrorMessage(`Could not open sketch file: ${sketchFile.fsPath}`);
-				return;
-			}
-			await window.showTextDocument(doc, { preview: false });
-			window.activeTextEditor?.revealRange(doc.lineAt(0).range);
-		} catch (error) {
-			window.showErrorMessage(`Could not open sketch file: ${sketchFile.fsPath}`);
-			console.error(error);
+		const newWindow = config.get<boolean>('newWindow');
+		if (newWindow === true) {
+			await commands.executeCommand('vscode.openFolder', Uri.file(folder), true);
+		} else {
+			workspace.updateWorkspaceFolders(
+				workspace.workspaceFolders ? workspace.workspaceFolders.length : 0,
+				null,
+				{ uri: Uri.file(folder) }
+			);
 		}
 	});
 
@@ -85,7 +86,9 @@ export function setupCommands(context: ExtensionContext) {
 			canSelectFolders: true,
 			canSelectMany: false,
 			title: "Select a folder to create a new sketch in",
-			defaultUri: workspace.workspaceFolders ? workspace.workspaceFolders[0].uri : undefined,
+			defaultUri: workspace.workspaceFolders && workspace.workspaceFolders[0]
+				? Uri.joinPath(workspace.workspaceFolders[0].uri, '..')
+				: undefined,
 		});
 		if (!folder || folder.length === 0) {
 			return;
