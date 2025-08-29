@@ -1,5 +1,5 @@
 {
-	"name": "processing4-vscode-extension",
+	"name": "processing-vscode-extension",
 	"version": "0.0.0",
 	"publisher": "processing-foundation",
 	"displayName": "Processing",
@@ -8,7 +8,7 @@
 	"license": "LGPL-2.1-or-later",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/processing/processing4-vscode-extension"
+		"url": "https://github.com/processing/processing-vscode-extension"
 	},
 	"icon": "media/processing-logo.png",
 	"categories": [
