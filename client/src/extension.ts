@@ -31,6 +31,7 @@ export async function activate(context: ExtensionContext) {
 	// TODO: Exporting to standalone application
 	// TODO: Override the default save-as
 	// TODO: limit running sketches when a sketch is open
+	// TODO: Sketch explorer context menu (right click)
 
 	// Set up the selected Processing version, awaiting because we don't want to continue until we have a version
 	await setupSelectedVersion(context);
