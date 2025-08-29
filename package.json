@@ -1,14 +1,14 @@
 {
 	"name": "processing4-vscode-extension",
-	"version": "1.0.6",
-	"publisher": "stefterv",
+	"version": "0.0.0",
+	"publisher": "processing-foundation",
 	"displayName": "Processing",
 	"description": "The easiest way to create and run Processing sketches in VSCode. Features include syntax highlighting, code completion, error checking, and more.",
-	"author": "Stef Tervelde",
+	"author": "Processing Foundation",
 	"license": "LGPL-2.1-or-later",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Stefterv/processing4-vscode-extension"
+		"url": "https://github.com/processing/processing4-vscode-extension"
 	},
 	"icon": "media/processing-logo.png",
 	"categories": [
