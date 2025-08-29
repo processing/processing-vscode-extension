@@ -3,7 +3,7 @@
 	"version": "1.0.6",
 	"publisher": "stefterv",
 	"displayName": "Processing",
-	"description": "Run Processing sketches in VSCode",
+	"description": "The easiest way to create and run Processing sketches in VSCode. Features include syntax highlighting, code completion, error checking, and more.",
 	"author": "Stef Tervelde",
 	"license": "LGPL-2.1-or-later",
 	"repository": {
@@ -22,6 +22,7 @@
 		"language-server",
 		"sketch",
 		"arduino",
+		"p5js",
 		"java",
 		"development",
 		"creative-coding",

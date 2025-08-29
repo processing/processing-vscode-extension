@@ -20,7 +20,7 @@ export const state = {
 	terminal: undefined as Terminal | undefined,
 	client: undefined as LanguageClient | undefined,
 	selectedVersion: undefined as ProcessingVersion | undefined,
-	onDidVersionChange: new EventEmitter<null>(),
+	onDidVersionChange: new EventEmitter<null>()
 };
 
 export async function activate(context: ExtensionContext) {
