@@ -37,6 +37,14 @@ Install the extension from the [Visual Studio Marketplace](https://marketplace.v
 
 When you run a sketch, a terminal will open at the bottom of VS Code to show the build output, and the Processing sketch window will appear.
 
+## Settings
+
+You can customize the extension in VS Code settings (via `Ctrl + ,` on Windows/Linux or `Cmd + ,` on macOS).
+
+- `processing.autosave`: Automatically saves your sketch before running it. Default: `true`.
+- `processing.newWindow`: Opens sketches in a new VS Code window. If disabled, sketches open in the current window. Default: `true`.
+- `processing.version`: Choose which installed Processing version to use. Default is `latest`, but you can specify a version (e.g., `4.4.6`).
+
 ## Troubleshooting
 
 If something doesn’t work:
