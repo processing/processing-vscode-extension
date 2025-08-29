@@ -58,7 +58,7 @@ export function setupCommands(context: ExtensionContext) {
 		let cmd = `${path} cli --sketch="${dirname(resource.fsPath)}" --run`;
 		if (process.platform === "win32") {
 			// on windows we need to pipe stderr to stdout and convert to string
-			cmd += `2>&1 | Out-String`;
+			cmd += ` 2>&1 | Out-String`;
 		}
 
 		terminal.sendText(cmd, true);
