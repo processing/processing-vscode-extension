@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"publisher": "processing-foundation",
 	"displayName": "Processing",
-	"description": "The easiest way to create and run Processing sketches in VSCode. Features include syntax highlighting, code completion, error checking, and more.",
+	"description": "The easiest way to create and run Processing sketches in VSCode. With syntax highlighting, code completion, error checking, and more.",
 	"author": "Processing Foundation",
 	"license": "LGPL-2.1-or-later",
 	"repository": {
@@ -16,6 +16,7 @@
 	],
 	"keywords": [
 		"processing",
+		"processingOrg",
 		"pde",
 		"language",
 		"lsp",
@@ -23,6 +24,8 @@
 		"sketch",
 		"arduino",
 		"p5js",
+		"p5",
+		"p5.js",
 		"java",
 		"development",
 		"creative-coding",
