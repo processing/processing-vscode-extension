@@ -10,9 +10,7 @@ This extension adds support for Processing sketches in VSCode. Includes familiar
 
 ## Requirements
 
-You will need **Processing 4.4.6 or later** installed on your computer.
-
-Download Processing here: [Processing](https://processing.org).
+You will need **Processing 4.4.6 or later** installed on your computer ([Download Processing](https://processing.org)).
 
 **IMPORTANT:** Run Processing at least once after installing it. This creates the files the extension needs.
 
@@ -70,7 +68,7 @@ The extension has been tested on:
 ## Known Issues
 
 * Some Processing constants (like `PI`, `RGB`, `DEGREES`) are not highlighted yet
-* Classes from third-party libraries are not recognized by the language server (sketches still run fine). See [issue #9](https://github.com/processing/processing-vscode-extension/issues/9)
+* Classes from third-party libraries are not recognized by the language server (sketches still run fine). See [this issue](https://github.com/processing/processing-vscode-extension/issues/9)
 * The Run/Stop buttons do not visually indicate when a sketch is running (this is due to limitations in VS Code's extension API)
 * The extension includes a bundled JDK for macOS, Windows, and Linux. This increases the extension size, but is necessary for reliably detecting your Processing installation across platforms. Eventually, we hope to remove this dependency and rely on the Processing CLI instead.
 
