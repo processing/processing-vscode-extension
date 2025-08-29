@@ -1,73 +1,78 @@
 # Processing VSCode Extension
 
 <!-- TODO: Generate grammar based on the installed Processing version -->
-<!-- TODO: Setup publishing https://code.visualstudio.com/api/working-with-extensions/publishing-extension  -->
 
-<!-- TODO: add a link to the extension Marketplace page -->
+Create and run Processing sketches in Visual Studio Code.
 
-This extension provides support for the Processing programming language in Visual Studio Code.
+![Processing VS Code Extension Screenshot](.github/media/screenshot.png)
 
-![Processing VSCode Extension Screenshot](.github/media/screenshot.png)
-
-With familiar run and stop buttons, syntax highlighting, and other helpful features like code suggestions, this extension is designed to support creative coding with Processing for people who prefer using Visual Studio Code as their code editor of choice.
+This extension adds support for Processing sketches in VSCode. Includes familiar run and stop buttons, syntax highlighting, code suggestions, and easy access to your sketchbook and examples. If you prefer coding in VS Code, this extension makes it easier to work with Processing.
 
 ## Requirements
-To use this extension, you need to have the **release of Processing (4.4.6+)** installed on your system. You can download it from this link: [Processing](https://processing.org).
 
-> [!IMPORTANT]
-> **Make sure to run Processing 4.4.6 at least once** before using the extension. This step is needed to initialize some required files.
+You will need **Processing 4.4.6 or later** installed on your computer.
+
+Download Processing here: [Processing](https://processing.org).
+
+**IMPORTANT:** Run Processing at least once after installing it. This creates the files the extension needs.
 
 ## Features
-- ▶️ Run / Stop buttons: Play your sketch directly in VS Code.
-- 📁 Sketchbook & Examples Explorer: Browse and open sketches easily.
-- 🎨 Syntax Highlighting: Color-coded formatting for Processing functions and variables.
-- 💡 Code suggestions & error checking: Powered by Processing’s Language Server.
-- 🛠️ No setup required: The extension auto-detects your Processing install.
 
-## How to Use
-To use the Processing VSCode extension, follow these steps:
+* Run and stop sketches directly in VS Code
+* Browse your sketchbook and open example sketches
+* Syntax highlighting for Processing code
+* Code suggestions and error checking with the Processing Language Server
+* Automatic detection of your Processing installation (no manual configuration required)
 
-1. Install Processing 4.4.6 or later
-2. Open a `.pde` file or use the sketchbook/explorer in VS Code.
-3. Press ▶️ to run your sketch!
+## Install
+
+Install the extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/) or search for "Processing" in the [Extension Marketplace](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace) within VS Code.
+
+## Getting Started
+
+1. Install the Processing extension for VS Code.
+2. Click the Processing icon in the Activity Bar on the side of the VS Code window.
+3. Open a sketch from your sketchbook or from the examples.
+4. Click the Run button to start your sketch.
+
+When you run a sketch, a terminal will open at the bottom of VS Code to show the build output, and the Processing sketch window will appear.
 
 ## Troubleshooting
-If you encounter any issues with the Processing VSCode extension, try the following steps:
 
-- Restart VS Code.
-- Make sure no other Processing extensions are installed in VSCode.
-- Quit any running instances of Processing.
-- Double-check that you're using the correct version of Processing (4.4.6+).
-- Try running the Processing app once before opening VS Code.
+If something doesn’t work:
+
+* Close VSCode
+* Check you have installed Processing 4.4.6 or later and ran it once
+* Run the Processing editor once
+* Restart VSCode
+* Remove any other Processing extensions that might conflict with this one
+* Close any running Processing sketches or editor windows
 
 ## Compatibility
-This extension has been tested on the following platforms:
 
-- ✅ macOS (Apple Silicon)
-- ✅ Windows 64-bit
-- ✅ Linux 64-bit
+The extension has been tested on:
 
-## Known issues
-- Play/Stop buttons don’t reflect the actual running state yet.
-- Syntax highlighting for Processing-specific constants (e.g., `PI`, `RGB`, `DEGREES`, etc) is not yet implemented.
-- Classes imported from third-party libraries are not recognized by the language server, leading to line errors (the sketch will still run correctly) see issue [#9](https://github.com/Stefterv/processing4-vscode-extension/issues/9).
+* macOS (Apple Silicon)
+* Windows 64-bit
+* Linux 64-bit
 
+## Known Issues
+
+* Some Processing constants (like `PI`, `RGB`, `DEGREES`) are not highlighted yet
+* Classes from third-party libraries are not recognized by the language server (sketches still run fine). See [issue #9](https://github.com/processing/processing-vscode-extension/issues/9)
+* The Run/Stop buttons do not visually indicate when a sketch is running (this is due to limitations in VS Code's extension API)
+* The extension includes a bundled JDK for macOS, Windows, and Linux. This increases the extension size, but is necessary for reliably detecting your Processing installation across platforms. Eventually, we hope to remove this dependency and rely on the Processing CLI instead.
 
 ## Contributing
-This extension is still in development, and you’re welcome to help!
 
-> [!NOTE]
-> Before opening a pull request, it's usually a good idea to start a conversation in the related issue or open a new one. This gives us a chance to talk through the idea together, point you to relevant parts of the code or documentation, and help make your contribution smoother and more likely to be accepted.
+This project is still growing, and contributions are welcome!
 
-1. Fork the repository
-2. Clone your fork
-3. Create a new branch
-4. Make your changes
-5. Test your changes locally
-6. Commit your changes (use a descriptive commit message)
-7. Push to your fork and open a pull request
+**IMPORTANT:** Before submitting a pull request, please read the [CONTRIBUTING.md](https://github.com/processing/processing4/blob/main/CONTRIBUTING.md) from the Processing repository.
+
+Please note we also have a [Code of Conduct](https://github.com/processing/processing4/blob/main/CODE-OF-CONDUCT.md) that we expect all contributors to follow.
 
 ## License
-This project is licensed under the GPL-2.0 License. See the [LICENSE](LICENSE.md) file for details.
 
-For information about Processing's own licensing, please refer to the Processing [README](https://github.com/processing/processing4?tab=readme-ov-file) file.
+This project uses the GPL-2.0 License. See [LICENSE](LICENSE.md) for details.
+
+For Processing’s own licensing, see the Processing [README](https://github.com/processing/processing4?tab=readme-ov-file).
