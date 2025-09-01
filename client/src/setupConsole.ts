@@ -50,10 +50,16 @@ export default function setupConsole(context: ExtensionContext) {
 		proc.on('close', (code) => {
 			provider.webview?.webview.postMessage({ type: 'close', value: code?.toString() });
 			sketchProcess = undefined;
+			commands.executeCommand('setContext', 'processing.sketch.running', false);
 		});
 		provider.webview?.show?.(true);
 		provider.webview?.webview.postMessage({ type: 'clear'});
 		sketchProcess = proc;
+		commands.executeCommand('setContext', 'processing.sketch.running', true);
+	});
+
+	const restartSketch = commands.registerCommand('processing.sketch.restart', (resource: Uri) => {
+		commands.executeCommand('processing.sketch.run', resource);
 	});
 
 	const stopSketch = commands.registerCommand('processing.sketch.stop', () => {
@@ -66,6 +72,7 @@ export default function setupConsole(context: ExtensionContext) {
 	context.subscriptions.push(
 		register,
 		startSketch,
+		restartSketch,
 		stopSketch
 	);
 }
