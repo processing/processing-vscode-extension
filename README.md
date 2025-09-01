@@ -71,7 +71,6 @@ The extension has been tested on:
 
 * Some Processing constants (like `PI`, `RGB`, `DEGREES`) are not highlighted yet
 * Classes from third-party libraries are not recognized by the language server (sketches still run fine). See [this issue](https://github.com/processing/processing-vscode-extension/issues/9)
-
 * The extension includes a bundled JDK for macOS, Windows, and Linux. This increases the extension size, but is necessary for reliably detecting your Processing installation across platforms. Eventually, we hope to remove this dependency and rely on the Processing CLI instead.
 
 ## Contributing
