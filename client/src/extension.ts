@@ -9,6 +9,7 @@ import { setupSidebar } from './setupSidebar';
 import { setupDecorators } from './setupDecorators';
 import { setupPDEFiles } from './setupPDEFiles';
 import { EventEmitter } from 'stream';
+import setupConsole from './setupConsole';
 
 
 export interface ProcessingVersion {
@@ -38,6 +39,7 @@ export async function activate(context: ExtensionContext) {
 	setupCommands(context);
 	setupLanguageServer();
 	setupSidebar(context);
+	setupConsole(context);
 	setupDecorators(context);
 	setupPDEFiles();
 }

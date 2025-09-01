@@ -141,16 +141,33 @@
 					"title": "Processing",
 					"icon": "media/processing-flat-color.svg"
 				}
+			],
+			"panel": [
+				{
+					"id": "processingConsole",
+					"title": "Processing Console",
+					"icon": "media/processing-flat-color.svg"
+				}
 			]
 		},
 		"views": {
+			"processingConsole": [
+				{
+					"type": "webview",
+					"id": "processingConsoleView",
+					"name": "Console",
+					"icon": "media/processing-flat-color.svg"
+				}
+			],
 			"processingSidebar": [
 				{
+					"type": "tree",
 					"id": "processingSidebarSketchbookView",
 					"name": "Sketchbook",
 					"icon": "media/processing-flat-color.svg"
 				},
 				{
+					"type": "tree",
 					"id": "processingSidebarExamplesView",
 					"name": "Examples",
 					"icon": "media/processing-flat-color.svg"
@@ -194,5 +211,8 @@
 		"mocha": "^10.3.0",
 		"typescript": "^5.8.2",
 		"typescript-eslint": "^8.26.0"
+	},
+	"dependencies": {
+		"tree-kill": "^1.2.2"
 	}
 }
