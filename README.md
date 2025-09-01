@@ -52,12 +52,12 @@ You can customize the extension in VS Code settings
 
 If something doesn’t work:
 
+* Close any running Processing sketches or editor windows
+* Remove any other Processing extensions that might conflict with this one
 * Close VSCode
-* Check you have installed Processing 4.4.6 or later and ran it once
+* Check you have installed Processing 4.4.6
 * Run the Processing editor once
 * Restart VSCode
-* Remove any other Processing extensions that might conflict with this one
-* Close any running Processing sketches or editor windows
 
 ## Compatibility
 
