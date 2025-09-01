@@ -1,12 +1,11 @@
 import { ChildProcess, spawn } from 'child_process';
-import {  commands, ExtensionContext, Uri, ViewColumn, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window, workspace } from 'vscode';
+import {  commands, ExtensionContext, Uri, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window, workspace } from 'vscode';
 import { state } from './extension';
 import { dirname } from 'path';
-import treeKill = require('tree-kill');
+import * as treeKill from 'tree-kill';
 
 export default function setupConsole(context: ExtensionContext) {
-	// Convert to array to allow for waiting on the process to end
-	let sketchProcess: ChildProcess | undefined = undefined;
+	const sketchProcesses: ChildProcess[] = [];
 
 	const provider = new ProcessingConsoleViewProvider();
 
@@ -49,12 +48,12 @@ export default function setupConsole(context: ExtensionContext) {
 		});
 		proc.on('close', (code) => {
 			provider.webview?.webview.postMessage({ type: 'close', value: code?.toString() });
-			sketchProcess = undefined;
+			sketchProcesses.splice(sketchProcesses.indexOf(proc), 1);
 			commands.executeCommand('setContext', 'processing.sketch.running', false);
 		});
 		provider.webview?.show?.(true);
 		provider.webview?.webview.postMessage({ type: 'clear'});
-		sketchProcess = proc;
+		sketchProcesses.push(proc);
 		commands.executeCommand('setContext', 'processing.sketch.running', true);
 	});
 
@@ -63,10 +62,9 @@ export default function setupConsole(context: ExtensionContext) {
 	});
 
 	const stopSketch = commands.registerCommand('processing.sketch.stop', () => {
-		if (sketchProcess === undefined) {
-			return;
+		for (const proc of sketchProcesses) {
+			treeKill(proc.pid as number);
 		}
-		treeKill(sketchProcess?.pid as number);
 	});
 
 	context.subscriptions.push(
