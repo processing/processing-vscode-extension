@@ -40,9 +40,17 @@ export default function setupConsole(context: ExtensionContext) {
 			}
 		);
 		proc.stdout.on("data", (data) => {
+			if(proc != sketchProcesses[0]) {
+				// If this is not the most recent process, ignore its output
+				return;
+			}
 			provider.webview?.webview.postMessage({ type: 'stdout', value: data?.toString() });
 		});
 		proc.stderr.on("data", (data) => {
+			if (proc != sketchProcesses[0]) {
+				// If this is not the most recent process, ignore its output
+				return;
+			}
 			provider.webview?.webview.postMessage({ type: 'stderr', value: data?.toString() });
 			// TODO: Handle and highlight errors in the editor
 		});
@@ -53,7 +61,7 @@ export default function setupConsole(context: ExtensionContext) {
 		});
 		provider.webview?.show?.(true);
 		provider.webview?.webview.postMessage({ type: 'clear'});
-		sketchProcesses.push(proc);
+		sketchProcesses.unshift(proc);
 		commands.executeCommand('setContext', 'processing.sketch.running', true);
 	});
 
