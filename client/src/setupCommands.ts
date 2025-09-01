@@ -1,77 +1,77 @@
 import { basename, dirname, join } from 'path';
 import { ExtensionContext, commands, Uri, window, workspace } from 'vscode';
-import { state } from './extension';
+// import { state } from './extension';
 
-const sketchNumber = 0;
+// const sketchNumber = 0;
 
 export function setupCommands(context: ExtensionContext) {
-	const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
-		// TODO: Use VScode contexts to highlight run button when sketch is running, blocked until we do not run the sketch in a terminal
-		// https://code.visualstudio.com/api/references/when-clause-contexts
+	// const runSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
+	// 	// TODO: Use VScode contexts to highlight run button when sketch is running, blocked until we do not run the sketch in a terminal
+	// 	// https://code.visualstudio.com/api/references/when-clause-contexts
 
-		const autosave = workspace
-			.getConfiguration('processing')
-			.get<boolean>('autosave');
-		if (autosave === true) {
-			// Save all files before running the sketch
-			commands.executeCommand('workbench.action.files.saveAll');
-		}
-		if (resource == undefined) {
-			const editor = window.activeTextEditor;
-			if (editor) {
-				resource = editor.document.uri;
-			}
-		}
+	// 	const autosave = workspace
+	// 		.getConfiguration('processing')
+	// 		.get<boolean>('autosave');
+	// 	if (autosave === true) {
+	// 		// Save all files before running the sketch
+	// 		commands.executeCommand('workbench.action.files.saveAll');
+	// 	}
+	// 	if (resource == undefined) {
+	// 		const editor = window.activeTextEditor;
+	// 		if (editor) {
+	// 			resource = editor.document.uri;
+	// 		}
+	// 	}
 
-		if (!resource) {
-			return;
-		}
+	// 	if (!resource) {
+	// 		return;
+	// 	}
 
-		// TODO: Give feedback if the sketch is starting
+	// 	return;
 
-		let terminal = state.terminal;
-		// Create a new terminal
-		if (terminal === undefined || terminal.exitStatus) {
-			window.terminals.forEach(t => {
-				if (t.name === "Sketch") {
-					t.dispose();
-				}
-			});
-			state.terminal = window.createTerminal("Sketch");
-			terminal = state.terminal;
-			// Show the terminal panel the first time
-			terminal.show(true);
-		} else {
-			// Send the command to the terminal
-			terminal.sendText('\x03', false);
-		}
+	// 	let terminal = state.terminal;
+	// 	// Create a new terminal
+	// 	if (terminal === undefined || terminal.exitStatus) {
+	// 		window.terminals.forEach(t => {
+	// 			if (t.name === "Sketch") {
+	// 				t.dispose();
+	// 			}
+	// 		});
+	// 		state.terminal = window.createTerminal("Sketch");
+	// 		terminal = state.terminal;
+	// 		// Show the terminal panel the first time
+	// 		terminal.show(true);
+	// 	} else {
+	// 		// Send the command to the terminal
+	// 		terminal.sendText('\x03', false);
+	// 	}
 
-		// clear the terminal
-		terminal.sendText("clear", true);
+	// 	// clear the terminal
+	// 	terminal.sendText("clear", true);
 
-		let path = state.selectedVersion.path;
-		if (process.platform === "win32") {
-			// on windows we need to escape spaces
-			path = `& "${path}"`;
-		}
+	// 	let path = state.selectedVersion.path;
+	// 	if (process.platform === "win32") {
+	// 		// on windows we need to escape spaces
+	// 		path = `& "${path}"`;
+	// 	}
 
-		let cmd = `${path} cli --sketch="${dirname(resource.fsPath)}" --run`;
-		if (process.platform === "win32") {
-			// on windows we need to pipe stderr to stdout and convert to string
-			cmd += ` 2>&1`;
-		}
+	// 	let cmd = `${path} cli --sketch="${dirname(resource.fsPath)}" --run`;
+	// 	if (process.platform === "win32") {
+	// 		// on windows we need to pipe stderr to stdout and convert to string
+	// 		cmd += ` 2>&1`;
+	// 	}
 
-		terminal.sendText(cmd, true);
-	});
+	// 	terminal.sendText(cmd, true);
+	// });
 
-	const stopSketch = commands.registerCommand('processing.sketch.stop', () => {
-		if (state.terminal === undefined) {
-			return;
-		}
+	// const stopSketch = commands.registerCommand('processing.sketch.stop', () => {
+	// 	if (state.terminal === undefined) {
+	// 		return;
+	// 	}
 
-		// Send the command to the terminal
-		state.terminal.sendText('\x03', false);
-	});
+	// 	// Send the command to the terminal
+	// 	state.terminal.sendText('\x03', false);
+	// });
 
 	const openSketch = commands.registerCommand('processing.sketch.open', async (folder: string, isReadOnly: boolean) => {
 		if (!folder) {
@@ -161,7 +161,7 @@ export function setupCommands(context: ExtensionContext) {
 
 	// TODO: Add command to select Processing version and set the setting
 
-	context.subscriptions.push(runSketch, stopSketch, openSketch, newSketch);
+	context.subscriptions.push(openSketch, newSketch);
 }
 
 // Helper function to convert a number to alphabetical (e.g., 0 = a, 1 = b, ..., 25 = z, 26 = aa, etc.)
