@@ -70,7 +70,6 @@ The extension has been tested on:
 ## Known Issues
 
 * Some Processing constants (like `PI`, `RGB`, `DEGREES`) are not highlighted yet
-* The Run/Stop buttons do not visually indicate when a sketch is running (this is due to limitations in VS Code's extension API)
 * Classes from third-party libraries are not recognized by the language server (sketches still run fine). See [issue 9](https://github.com/processing/processing-vscode-extension/issues/9)
 * The extension includes a bundled JDK for macOS, Windows, and Linux. This increases the extension size, but is necessary for reliably detecting your Processing installation across platforms. Eventually, we hope to remove this dependency and rely on the Processing CLI instead.
 
