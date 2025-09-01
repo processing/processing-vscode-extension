@@ -49,7 +49,7 @@ export default function setupConsole(context: ExtensionContext) {
 		proc.on('close', (code) => {
 			provider.webview?.webview.postMessage({ type: 'close', value: code?.toString() });
 			sketchProcesses.splice(sketchProcesses.indexOf(proc), 1);
-			commands.executeCommand('setContext', 'processing.sketch.running', false);
+			commands.executeCommand('setContext', 'processing.sketch.running', sketchProcesses.length > 0);
 		});
 		provider.webview?.show?.(true);
 		provider.webview?.webview.postMessage({ type: 'clear'});
