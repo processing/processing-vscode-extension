@@ -10,9 +10,7 @@ This extension adds support for Processing sketches in VSCode. Includes familiar
 
 ## Requirements
 
-You will need **Processing 4.4.6 or later** installed on your computer.
-
-Download Processing here: [Processing](https://processing.org).
+You will need **Processing 4.4.6 or later** installed on your computer ([Download Processing](https://processing.org)).
 
 **IMPORTANT:** Run Processing at least once after installing it. This creates the files the extension needs.
 

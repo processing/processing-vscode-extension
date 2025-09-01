@@ -50,6 +50,11 @@
 				"icon": "media/start.svg"
 			},
 			{
+				"command": "processing.sketch.restart",
+				"title": "Restart the Processing Sketch",
+				"icon": "media/restart.svg"
+			},
+			{
 				"command": "processing.sketch.stop",
 				"title": "Stop the Processing Sketch",
 				"icon": "media/stop.svg"
@@ -83,7 +88,12 @@
 			"editor/title": [
 				{
 					"command": "processing.sketch.run",
-					"when": "editorLangId == Processing || editorLangId == java",
+					"when": "!processing.sketch.running && (editorLangId == Processing || editorLangId == java)",
+					"group": "navigation"
+				},
+				{
+					"command": "processing.sketch.restart",
+					"when": "processing.sketch.running && (editorLangId == Processing || editorLangId == java)",
 					"group": "navigation"
 				},
 				{
@@ -141,16 +151,33 @@
 					"title": "Processing",
 					"icon": "media/processing-flat-color.svg"
 				}
+			],
+			"panel": [
+				{
+					"id": "processingConsole",
+					"title": "Processing Console",
+					"icon": "media/processing-flat-color.svg"
+				}
 			]
 		},
 		"views": {
+			"processingConsole": [
+				{
+					"type": "webview",
+					"id": "processingConsoleView",
+					"name": "Console",
+					"icon": "media/processing-flat-color.svg"
+				}
+			],
 			"processingSidebar": [
 				{
+					"type": "tree",
 					"id": "processingSidebarSketchbookView",
 					"name": "Sketchbook",
 					"icon": "media/processing-flat-color.svg"
 				},
 				{
+					"type": "tree",
 					"id": "processingSidebarExamplesView",
 					"name": "Examples",
 					"icon": "media/processing-flat-color.svg"
@@ -194,5 +221,8 @@
 		"mocha": "^10.3.0",
 		"typescript": "^5.8.2",
 		"typescript-eslint": "^8.26.0"
+	},
+	"dependencies": {
+		"tree-kill": "^1.2.2"
 	}
 }
