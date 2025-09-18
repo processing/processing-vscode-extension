@@ -5,6 +5,7 @@
 		"Once accepted there, we are happy to receive an update request."
 	],
 	"version": "https://github.com/atom/language-java/commit/29f977dc42a7e2568b39bb6fb34c4ef108eb59b3",
+	"version_note": "Updated with Processing-specific keywords and functions.",
 	"name": "Processing",
 	"scopeName": "source.pde",
 	"patterns": [
@@ -543,6 +544,9 @@
 				{
 					"match": ";",
 					"name": "punctuation.terminator.java"
+				},
+				{
+					"include": "#processing-specific"
 				}
 			]
 		},
@@ -671,6 +675,22 @@
 				{
 					"match": "\\bsuper\\b",
 					"name": "variable.language.java"
+				}
+			]
+		},
+		"processing-specific": {
+			"patterns": [
+				{
+					"match": "\\b(ADD|ALIGN_CENTER|ALIGN_LEFT|ALIGN_RIGHT|ALPHA|ALPHA_MASK|ALT|AMBIENT|ARC|ARROW|ARGB|BACKSPACE|BASELINE|BEVEL|BLEND|BLUE_MASK|BLUR|BOTTOM|BOX|BURN|CENTER|CHATTER|CHORD|CLAMP|CLICK|CLOSE|CMYK|CODED|COMPLAINT|COMPOSITE|COMPONENT|CONCAVE_POLYGON|CONTROL|CONVEX_POLYGON|CORNER|CORNERS|CROSS|CUSTOM|DARKEST|DEGREES|DEG_TO_RAD|DELETE|DIAMETER|DIFFERENCE|DIFFUSE|DILATE|DIRECTIONAL|DISABLE_ACCURATE_2D|DISABLE_DEPTH_MASK|DISABLE_DEPTH_SORT|DISABLE_DEPTH_TEST|DISABLE_NATIVE_FONTS|DISABLE_OPENGL_ERRORS|DISABLE_PURE_STROKE|DISABLE_TEXTURE_MIPMAPS|DISABLE_TRANSFORM_CACHE|DISABLE_STROKE_PERSPECTIVE|DISABLED|DODGE|DOWN|DRAG|DXF|ELLIPSE|ENABLE_ACCURATE_2D|ENABLE_DEPTH_MASK|ENABLE_DEPTH_SORT|ENABLE_DEPTH_TEST|ENABLE_NATIVE_FONTS|ENABLE_OPENGL_ERRORS|ENABLE_PURE_STROKE|ENABLE_TEXTURE_MIPMAPS|ENABLE_TRANSFORM_CACHE|ENABLE_STROKE_PERSPECTIVE|ENTER|EPSILON|ERODE|ESC|EXCLUSION|EXIT|FX2D|GIF|GRAY|GREEN_MASK|GROUP|HALF|HAND|HARD_LIGHT|HINT_COUNT|HSB|IMAGE|INVERT|JAVA2D|JPEG|LEFT|LIGHTEST|LINE|LINES|LINUX|MACOSX|MAX_FLOAT|MAX_INT|MIN_FLOAT|MIN_INT|MITER|MODEL|MOVE|MULTIPLY|NORMAL|NORMALIZED|NO_DEPTH_TEST|NTSC|ONE|OPAQUE|OPEN|ORTHOGRAPHIC|OVERLAY|PAL|PDF|P2D|P3D|PERSPECTIVE|PIE|PIXEL_CENTER|POINT|POINTS|POSTERIZE|PRESS|PROBLEM|PROJECT|QUAD|QUAD_STRIP|QUADS|RAD_TO_DEG|RADIUS|RADIANS|RECT|RED_MASK|RELEASE|REPEAT|REPLACE|RETURN|RGB|RIGHT|ROUND|SCREEN|SECAM|SHAPE|SHIFT|SPAN|SPECULAR|SPHERE|SOFT_LIGHT|SQUARE|SUBTRACT|SVG|SVIDEO|TAB|TARGA|TEXT|TFF|THIRD_PI|THRESHOLD|TIFF|TOP|TRIANGLE|TRIANGLE_FAN|TRIANGLES|TRIANGLE_STRIP|TUNER|TWO|UP|WAIT|WHITESPACE)\\b",
+					"name": "support.constant.processing.literal"
+				},
+				{
+					"match": "\\b(width|height|displayHeight|displayWidth|focused|frameCount|frameRate|HALF_PI|key|keyCode|keyPressed|mouseButton|mousePressed|mouseX|mouseY|PI|pixelHeight|pixels|pixelWidth|pmouseX|pmouseY|QUARTER_PI|TAU|TWO_PI)\\b",
+					"name": "support.constant.processing.keyword"
+				},
+				{
+					"match": "\\b(Array|ArrayList|Boolean|Byte|BufferedReader|Character|Class|Float|Integer|HashMap|PrintWriter|String|StringBuffer|StringBuilder|Thread|FloatDict|FloatList|IntDict|IntList|JSONArray|JSONObject|PFont|PGraphics|PImage|PShader|PShape|PVector|StringDict|StringList|Table|TableRow|XML)\\b",
+					"name": "support.class.processing.keyword"
 				}
 			]
 		},
