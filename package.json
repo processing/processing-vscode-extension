@@ -67,6 +67,10 @@
 				"command": "processing.sketch.new",
 				"title": "Create a new Processing Sketch",
 				"icon": "$(new-file)"
+			},
+			{
+				"command": "processing.sketch.export",
+				"title": "Export the Processing Sketch"
 			}
 		],
 		"keybindings": [
