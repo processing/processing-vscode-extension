@@ -32,9 +32,14 @@ export default function setupConsole(context: ExtensionContext) {
 		commands.executeCommand('processingConsoleView.focus');
 		commands.executeCommand('processing.sketch.stop');
 
+		const extraArgs = [];
+		if (Array.isArray(extraArguments)) {
+			extraArgs.push(...extraArguments);
+		}
+
 		const proc = spawn(
 			state.selectedVersion.path,
-			['cli', `--sketch=${dirname(resource.fsPath)}`, ...extraArguments, '--run'],
+			['cli', `--sketch=${dirname(resource.fsPath)}`, ...extraArgs, '--run'],
 			{
 				shell: false,
 			}
