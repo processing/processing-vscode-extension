@@ -1,5 +1,5 @@
 import { ChildProcess, spawn } from 'child_process';
-import {  commands, ExtensionContext, Uri, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window, workspace } from 'vscode';
+import { commands, ExtensionContext, Uri, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window, workspace } from 'vscode';
 import { state } from './extension';
 import { dirname } from 'path';
 import * as treeKill from 'tree-kill';
@@ -11,7 +11,7 @@ export default function setupConsole(context: ExtensionContext) {
 
 	const register = window.registerWebviewViewProvider('processingConsoleView', provider);
 
-	const startSketch = commands.registerCommand('processing.sketch.run', (resource: Uri) => {
+	const startSketch = commands.registerCommand('processing.sketch.run', (resource: Uri, extraArguments: string[]) => {
 		const autosave = workspace
 			.getConfiguration('processing')
 			.get<boolean>('autosave');
@@ -25,22 +25,22 @@ export default function setupConsole(context: ExtensionContext) {
 				resource = editor.document.uri;
 			}
 		}
-		
+
 		if (!resource) {
 			return;
 		}
 		commands.executeCommand('processingConsoleView.focus');
 		commands.executeCommand('processing.sketch.stop');
-		
+
 		const proc = spawn(
 			state.selectedVersion.path,
-			['cli', `--sketch=${dirname(resource.fsPath)}`, '--run'],
+			['cli', `--sketch=${dirname(resource.fsPath)}`, ...extraArguments, '--run'],
 			{
 				shell: false,
 			}
 		);
 		proc.stdout.on("data", (data) => {
-			if(proc != sketchProcesses[0]) {
+			if (proc != sketchProcesses[0]) {
 				// If this is not the most recent process, ignore its output
 				return;
 			}
@@ -60,7 +60,7 @@ export default function setupConsole(context: ExtensionContext) {
 			commands.executeCommand('setContext', 'processing.sketch.running', sketchProcesses.length > 0);
 		});
 		provider.webview?.show?.(true);
-		provider.webview?.webview.postMessage({ type: 'clear'});
+		provider.webview?.webview.postMessage({ type: 'clear' });
 		sketchProcesses.unshift(proc);
 		commands.executeCommand('setContext', 'processing.sketch.running', true);
 	});
@@ -75,11 +75,17 @@ export default function setupConsole(context: ExtensionContext) {
 		}
 	});
 
+	const buildSketch = commands.registerCommand('processing.sketch.export', () => {
+		commands.executeCommand('processing.sketch.run', undefined, ['--export']);
+	});
+
+
 	context.subscriptions.push(
 		register,
 		startSketch,
 		restartSketch,
-		stopSketch
+		stopSketch,
+		buildSketch
 	);
 }
 
