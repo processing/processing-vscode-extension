@@ -1,0 +1,237 @@
+name: Test Deploy Preview Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-workflow-trigger:
+    name: Test 1 - Workflow Trigger on PR to Main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify workflow file exists
+        run: |
+          if [ ! -f ".github/workflows/deploy-preview.yml" ]; then
+            echo "ERROR: deploy-preview.yml workflow file not found"
+            exit 1
+          fi
+          echo "✓ Workflow file exists"
+
+      - name: Verify trigger configuration
+        run: |
+          # Check if workflow is triggered on pull_request to main branch
+          if grep -q "pull_request:" .github/workflows/deploy-preview.yml && \
+             grep -A 2 "pull_request:" .github/workflows/deploy-preview.yml | grep -q "main"; then
+            echo "✓ Workflow correctly configured to trigger on PR to main"
+          else
+            echo "ERROR: Workflow trigger configuration is incorrect"
+            exit 1
+          fi
+
+  test-checkout-and-setup:
+    name: Test 2 - Code Checkout and Node.js Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify checkout action
+        run: |
+          # Verify we're in the correct repository
+          if [ -d ".git" ]; then
+            echo "✓ Repository successfully checked out"
+          else
+            echo "ERROR: Repository not checked out properly"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify Node.js setup
+        run: |
+          NODE_VERSION=$(node --version)
+          echo "Node.js version: $NODE_VERSION"
+          if [[ $NODE_VERSION == v20* ]]; then
+            echo "✓ Node.js 20 successfully set up"
+          else
+            echo "ERROR: Node.js version mismatch"
+            exit 1
+          fi
+
+      - name: Verify npm is available
+        run: |
+          NPM_VERSION=$(npm --version)
+          echo "npm version: $NPM_VERSION"
+          if [ ! -z "$NPM_VERSION" ]; then
+            echo "✓ npm is available"
+          else
+            echo "ERROR: npm not found"
+            exit 1
+          fi
+
+  test-dependency-installation:
+    name: Test 3 - Dependencies Installation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Verify root dependencies
+        run: |
+          if [ -d "node_modules" ]; then
+            echo "✓ Root dependencies installed successfully"
+            echo "Root node_modules size: $(du -sh node_modules | cut -f1)"
+          else
+            echo "ERROR: Root dependencies not installed"
+            exit 1
+          fi
+
+      - name: Verify root package-lock exists
+        run: |
+          if [ -f "package-lock.json" ]; then
+            echo "✓ package-lock.json exists for clean install"
+          else
+            echo "ERROR: package-lock.json not found"
+            exit 1
+          fi
+
+      - name: Install client dependencies
+        run: cd client && npm ci
+
+      - name: Verify client dependencies
+        run: |
+          if [ -d "client/node_modules" ]; then
+            echo "✓ Client dependencies installed successfully"
+            echo "Client node_modules size: $(du -sh client/node_modules | cut -f1)"
+          else
+            echo "ERROR: Client dependencies not installed"
+            exit 1
+          fi
+
+      - name: Verify client package-lock exists
+        run: |
+          if [ -f "client/package-lock.json" ]; then
+            echo "✓ client/package-lock.json exists for clean install"
+          else
+            echo "ERROR: client/package-lock.json not found"
+            exit 1
+          fi
+
+  test-client-build:
+    name: Test 4 - Client Application Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install client dependencies
+        run: cd client && npm ci
+
+      - name: Build client
+        run: cd client && npm run build
+
+      - name: Verify build output
+        run: |
+          if [ -d "client/out" ] || [ -d "client/dist" ] || [ -d "client/build" ]; then
+            echo "✓ Client build completed successfully"
+            # List build artifacts
+            echo "Build artifacts:"
+            ls -lh client/out 2>/dev/null || ls -lh client/dist 2>/dev/null || ls -lh client/build 2>/dev/null || true
+          else
+            echo "ERROR: Client build output directory not found"
+            exit 1
+          fi
+
+      - name: Verify build script exists
+        run: |
+          if grep -q '"build"' client/package.json; then
+            echo "✓ Build script exists in client/package.json"
+          else
+            echo "ERROR: Build script not found in client/package.json"
+            exit 1
+          fi
+
+  test-vercel-deployment-config:
+    name: Test 5 - Vercel Deployment Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Vercel action configuration
+        run: |
+          WORKFLOW_FILE=".github/workflows/deploy-preview.yml"
+          
+          # Check if Vercel action is present
+          if grep -q "amondnet/vercel-action@v25" "$WORKFLOW_FILE"; then
+            echo "✓ Vercel deployment action configured"
+          else
+            echo "ERROR: Vercel action not found or incorrect version"
+            exit 1
+          fi
+
+      - name: Verify required secrets configuration
+        run: |
+          WORKFLOW_FILE=".github/workflows/deploy-preview.yml"
+          
+          # Check for required secret references
+          REQUIRED_SECRETS=("VERCEL_TOKEN" "ORG_ID" "PROJECT_ID" "GITHUB_TOKEN")
+          
+          for secret in "${REQUIRED_SECRETS[@]}"; do
+            if grep -q "$secret" "$WORKFLOW_FILE"; then
+              echo "✓ Secret $secret is configured in workflow"
+            else
+              echo "ERROR: Secret $secret not found in workflow"
+              exit 1
+            fi
+          done
+
+      - name: Verify deployment step order
+        run: |
+          WORKFLOW_FILE=".github/workflows/deploy-preview.yml"
+          
+          # Verify that deployment comes after build
+          if grep -n "Build client" "$WORKFLOW_FILE" | cut -d: -f1 | \
+             xargs -I {} sh -c 'grep -n "Deploy to Vercel" .github/workflows/deploy-preview.yml | cut -d: -f1 | xargs -I @ test {} -lt @'; then
+            echo "✓ Deployment step correctly ordered after build"
+          else
+            echo "ERROR: Deployment step ordering issue"
+            exit 1
+          fi
+
+      - name: Summary
+        run: |
+          echo "=================================="
+          echo "All Vercel deployment configuration checks passed!"
+          echo "=================================="
+          echo "The workflow correctly:"
+          echo "  • Uses the Vercel deployment action"
+          echo "  • Configures all required secrets"
+          echo "  • Orders deployment after build step"
+          echo "=================================="
