@@ -6,32 +6,27 @@ Create and run Processing sketches in Visual Studio Code.
 
 ![Processing VS Code Extension Screenshot](.github/media/screenshot.png)
 
-This extension adds support for Processing sketches in VSCode. Includes familiar run and stop buttons, syntax highlighting, code suggestions, and easy access to your sketchbook and examples. If you prefer coding in VS Code, this extension makes it easier to work with Processing.
-
-## Requirements
-
-You will need **Processing 4.4.6 or later** installed on your computer ([Download Processing](https://processing.org)).
-
-**IMPORTANT:** Run Processing at least once after installing it. This creates the files the extension needs.
-
-## Features
-
-* Run and stop sketches directly in VS Code
-* Browse your sketchbook and open example sketches
-* Syntax highlighting for Processing code
-* Code suggestions and error checking with the Processing Language Server
-* Automatic detection of your Processing installation (no manual configuration required)
-
-## Install
-
-Install the extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/) or search for "Processing" in the [Extension Marketplace](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace) within VS Code.
+This extension adds support for Processing sketches in VSCode. It includes familiar run and stop buttons, syntax highlighting, code suggestions, and easy access to your sketchbook and examples.
 
 ## Getting Started
 
-1. Install the Processing extension for VS Code.
-2. Click the Processing icon in the Activity Bar on the side of the VS Code window.
-3. Open a sketch from your sketchbook or from the examples.
-4. Click the Run button to start your sketch.
+### Prerequisites
+
+Before you begin, make sure to:
+
+- Install **Processing 4.4.6 or later** ([Download Processing](https://processing.org))
+- Run Processing at least once after installing it. This creates the files the extension needs.
+- Uninstall any previously installed Processing extensions. This extension may conflict with other Processing extensions, leading to unexpected behavior.
+
+### Installation
+
+Install the extension from the [Visual Studio Marketplace](https://vscode.processing.org/) or search for "Processing" in the [Extension Marketplace](https://marketplace.visualstudio.com/). You can also install it directly from VS Code by searching for "Processing" in the Extensions view (`Ctrl + Shift + X` or `Cmd + Shift + X` on macOS). Pick the extension published by "Processing Foundation".
+
+### Running Your First Sketch
+
+1. Click the Processing icon in the Activity Bar on the side of the VS Code window.
+2. Open a sketch from your sketchbook or from the examples.
+3. Click the Run button to start your sketch.
 
 When you run a sketch, a terminal will open at the bottom of VS Code to show the build output, and the Processing sketch window will appear.
 
@@ -46,16 +41,24 @@ You can customize the extension in VS Code settings
    - `processing.newWindow`: Opens sketches in a new VS Code window. If disabled, sketches open in the current window. Default: `true`.
    - `processing.version`: Choose which installed Processing version to use. Default is `latest`, but you can specify a version (e.g., `4.4.6`).
 
+## Known Issues
+
+* Some Processing constants (like `PI`, `RGB`, `DEGREES`) are not highlighted.
+* The extension includes a bundled JDK for macOS, Windows, and Linux. This increases the extension size, but is necessary for reliably detecting your Processing installation across platforms. Eventually, we hope to remove this dependency and rely on the Processing CLI instead.
+
 ## Troubleshooting
 
 If something doesn’t work:
 
-* Close any running Processing sketches or editor windows
-* Remove any other Processing extensions that might conflict with this one
 * Close VSCode
-* Check you have installed Processing 4.4.6
-* Run the Processing editor once
-* Restart VSCode
+* Remove any other Processing extensions you may have installed
+* Install the latest version of Processing (4.4.6 or later)
+* Close any running Processing sketches or editor windows
+* Run the Processing editor (PDE) once
+
+After following these steps, reopen VSCode and try again. 
+
+If you still encounter issues, please ask on the [Processing Forum](https://discourse.processing.org) or check the [GitHub Issues page](https://github.com/processing/processing-vscode-extension/issues).
 
 ## Compatibility
 
@@ -64,12 +67,6 @@ The extension has been tested on:
 * macOS (Apple Silicon)
 * Windows 64-bit
 * Linux 64-bit
-
-## Known Issues
-
-* Some Processing constants (like `PI`, `RGB`, `DEGREES`) are not highlighted yet
-* Classes from third-party libraries are not recognized by the language server (sketches still run fine). See [this issue](https://github.com/processing/processing-vscode-extension/issues/9)
-* The extension includes a bundled JDK for macOS, Windows, and Linux. This increases the extension size, but is necessary for reliably detecting your Processing installation across platforms. Eventually, we hope to remove this dependency and rely on the Processing CLI instead.
 
 ## Contributing
 
