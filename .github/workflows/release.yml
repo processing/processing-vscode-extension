@@ -95,3 +95,8 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
           vsce publish
+
+      - name: Install ovsx
+        run: |
+          npm install -g @vscode/ovsx
+          npm run ovsx publish *.vsix -p ${{ secrets.OPENVSX_TOKEN }}
