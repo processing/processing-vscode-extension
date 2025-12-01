@@ -227,6 +227,7 @@
 		"typescript-eslint": "^8.26.0"
 	},
 	"dependencies": {
+		"ovsx": "^0.10.7",
 		"tree-kill": "^1.2.2"
 	}
 }

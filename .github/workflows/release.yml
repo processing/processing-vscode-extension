@@ -95,3 +95,7 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
           vsce publish
+
+      - name: Publish to Open VSX
+        run: |
+          npx ovsx publish processing-vscode-extension-${{ github.event.release.tag_name }}.vsix -p ${{ secrets.OPENVSX_TOKEN }}
