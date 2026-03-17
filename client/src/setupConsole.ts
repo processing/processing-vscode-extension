@@ -105,6 +105,40 @@ class ProcessingConsoleViewProvider implements WebviewViewProvider {
 		webviewView.webview.html = `
 				<!DOCTYPE html>
 				<html>
+					<head>
+						<style>
+							body {
+								color: var(--vscode-editor-foreground);
+								background-color: var(--vscode-editor-background);
+								margin: 0;
+								padding: 8px;
+								font-family: var(--vscode-editor-font-family);
+								font-size: var(--vscode-editor-font-size);
+							}
+
+							pre {
+								margin: 0;
+								white-space: pre-wrap;
+								word-break: break-word;
+							}
+
+							.console-timestamp {
+								color: var(--vscode-descriptionForeground);
+							}
+
+							.console-stdout {
+								color: var(--vscode-editor-foreground);
+							}
+
+							.console-stderr {
+								color: var(--vscode-editorError-foreground);
+							}
+
+							.console-close {
+								color: var(--vscode-descriptionForeground);
+							}
+						</style>
+					</head>
 					<body>
 						<script>
 							window.addEventListener('message', event => {
@@ -112,14 +146,26 @@ class ProcessingConsoleViewProvider implements WebviewViewProvider {
 								const message = event.data; // The JSON data our extension sent
 
 								const isScrolledToBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight;
+								const appendConsoleLine = (lineClass, text) => {
+									const pre = document.createElement("pre");
+									pre.className = lineClass;
 
-								const ts = document.createElement("span");
-								ts.style.color = "gray";
-								const now = new Date();
-								const hours = now.getHours().toString().padStart(2, '0');
-								const minutes = now.getMinutes().toString().padStart(2, '0');
-								const seconds = now.getSeconds().toString().padStart(2, '0');
-								ts.textContent = "[" + hours + ":" + minutes + ":" + seconds + "] ";
+									const ts = document.createElement("span");
+									ts.className = "console-timestamp";
+									const now = new Date();
+									const hours = now.getHours().toString().padStart(2, '0');
+									const minutes = now.getMinutes().toString().padStart(2, '0');
+									const seconds = now.getSeconds().toString().padStart(2, '0');
+									ts.textContent = "[" + hours + ":" + minutes + ":" + seconds + "] ";
+
+									pre.textContent = text;
+									if (pre.textContent.endsWith("\\n")) {
+										pre.textContent = pre.textContent.slice(0, -1);
+									}
+
+									pre.prepend(ts);
+									document.body.appendChild(pre);
+								};
 								
 
 								switch (message.type) {
@@ -127,31 +173,13 @@ class ProcessingConsoleViewProvider implements WebviewViewProvider {
 										document.body.innerHTML = '';
 										break;
 									case 'stdout':
-										var pre = document.createElement("pre");
-										pre.style.color = "white";
-										pre.textContent = message.value;
-										if (pre.textContent.endsWith("\\n")) {
-											pre.textContent = pre.textContent.slice(0, -1);
-										}
-										pre.prepend(ts);
-										document.body.appendChild(pre);
+										appendConsoleLine("console-stdout", message.value);
 										break;
 									case 'stderr':
-										var pre = document.createElement("pre");
-										pre.style.color = "red";
-										pre.textContent = message.value;
-										if (pre.textContent.endsWith("\\n")) {
-											pre.textContent = pre.textContent.slice(0, -1);
-										}
-										pre.prepend(ts);
-										document.body.appendChild(pre);
+										appendConsoleLine("console-stderr", message.value);
 										break;
 									case 'close':
-										var pre = document.createElement("pre");
-										pre.style.color = "gray";
-										pre.textContent = "Process exited with code " + message.value;
-										pre.prepend(ts);
-										document.body.appendChild(pre);
+										appendConsoleLine("console-close", "Process exited with code " + message.value);
 										break;
 								}
 
