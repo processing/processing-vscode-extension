@@ -145,6 +145,12 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Open sketches in a new window. If disabled, the current window will be reused."
+				},
+				"processing.openSketchFilesOnLoad": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"description": "Automatically open all sketch files (.pde, .java) when a workspace is loaded. Disable to prevent files from being opened on startup."
 				}
 			}
 		},

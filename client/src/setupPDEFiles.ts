@@ -10,6 +10,9 @@ export function setupPDEFiles() {
 }
 
 async function OpenSketchFiles(folder: WorkspaceFolder) {
+	const config = workspace.getConfiguration('processing');
+	if (!config.get<boolean>('openSketchFilesOnLoad', true)) return;
+
 	// find all the .pde files in the folder
 	const files = await workspace.findFiles(new RelativePattern(folder, '*.{pde,java}'));
 
